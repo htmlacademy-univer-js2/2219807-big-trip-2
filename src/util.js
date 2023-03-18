@@ -1,11 +1,7 @@
 import dayjs from 'dayjs';
 
-const humanizeDate = (date) => {
-  return dayjs(date).format('D MMMM');
-};
+const humanizeDate = (date) => dayjs(date).format('HH MM');
+const getRandomInteger = (max) => Math.floor(Math.random() * max);
+const getRandomBoolean = () => Math.round(Math.random()) === 1;
 
-const getRandomInteger = (max) => {
-  return Math.floor(Math.random() * max);
-};
-
-export {getRandomInteger, humanizeDate};
+export {getRandomInteger, humanizeDate, getRandomBoolean};

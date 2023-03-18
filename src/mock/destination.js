@@ -1,7 +1,7 @@
-import {countries, imageReference, maxImageId, waypointDescriptions} from '../const';
+import {countries, imageReference, maxImageId, pointDescriptions} from '../const';
 import {getRandomInteger} from '../util';
 
-const getRandomDescription = () => waypointDescriptions[getRandomInteger(waypointDescriptions.length - 1)];
+const getRandomDescription = () => pointDescriptions[getRandomInteger(pointDescriptions.length - 1)];
 const getRandomCountry = () => countries[getRandomInteger(countries.length - 1)];
 const getRandomPicture = () => `${imageReference}${getRandomInteger(maxImageId)}`;
 

@@ -1,4 +1,4 @@
-const waypointDescriptions = [
+const pointDescriptions = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   'Cras aliquet varius magna, non porta ligula feugiat eget.',
   'Fusce tristique felis at fermentum pharetra.',
@@ -16,4 +16,4 @@ const tripType = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in',
 
 const maxImageId = 1000;
 
-export {waypointDescriptions, imageReference, maxImageId, countries, tripType};
+export {pointDescriptions, imageReference, maxImageId, countries, tripType};

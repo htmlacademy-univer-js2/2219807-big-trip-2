@@ -21,7 +21,7 @@ class Trip {
     render(this.component, this.container);
     render(new CreationForm(), this.component.getElement(), RenderPosition.BEFOREEND);
     render(new EditFormView(), this.component.getElement(), RenderPosition.BEFOREEND);
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < this.boardPoints.length; i++) {
       render(new PointsView(), this.component.getElement(), RenderPosition.BEFOREEND);
     }
     render(new Filter(), filterContainer, RenderPosition.BEFOREEND);

@@ -1,11 +1,18 @@
 import {createElement} from '../render';
+import {humanizeDate} from '../util';
 
-const createWaypoint = () => (
-  `<li class="trip-events__item">
+
+const createPointTemplate = (point) => {
+  // const {dateFrom} = point;
+  // const date = dateFrom !== null ? humanizeDate(dateFrom) : '';
+
+
+  return (
+    `<li class="trip-events__item">
               <div class="event">
                 <time class="event__date" datetime="2019-03-18">MAR 18</time>
                 <div class="event__type">
-                  <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+                  <img class="event__type-icon" width="42" height="42" src="img/icons/flight.png" alt="Event type icon">
                 </div>
                 <h3 class="event__title">Taxi Amsterdam</h3>
                 <div class="event__schedule">
@@ -38,11 +45,16 @@ const createWaypoint = () => (
                 </button>
               </div>
             </li>`
-);
+  );
+};
 
-export default class WaypointsView {
+export default class PointView {
+  constructor(point) {
+    this.point = point;
+  }
+
   getTemplate() {
-    return createWaypoint();
+    return createPointTemplate(this.point);
   }
 
   getElement() {

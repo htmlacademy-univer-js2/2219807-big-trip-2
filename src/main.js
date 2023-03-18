@@ -1,9 +1,9 @@
 import {render, RenderPosition} from './render';
 import Filter from './view/filters';
 import Trip from './presenter/trip';
-import WaypointModel from './model/waypoint-model';
+import PointModel from './model/point-model';
 
-const waypointsModel = new WaypointModel();
+const waypointsModel = new PointModel();
 const filterContainer = document.querySelector('.trip-controls__filters');
 const tripContainer = document.querySelector('.trip-events');
 const tripPresenter = new Trip({container: tripContainer});

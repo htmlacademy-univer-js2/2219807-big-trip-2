@@ -1,15 +1,15 @@
 import {render, RenderPosition} from '../render';
-import WaypointsView from '../view/waypoint';
+import PointView from '../view/point-view';
 import SortView from '../view/sort';
 import CreationForm from '../view/creation-form';
 import EditFormView from '../view/edit-form';
-import WaypointsList from '../view/waypoints-list';
+import PointsList from '../view/points-list';
 import Filter from '../view/filters';
 
 
 class Trip {
   constructor({container}) {
-    this.component = new WaypointsList();
+    this.component = new PointsList();
     this.container = container;
   }
 
@@ -22,7 +22,7 @@ class Trip {
     render(new CreationForm(), this.component.getElement(), RenderPosition.BEFOREEND);
     render(new EditFormView(), this.component.getElement(), RenderPosition.BEFOREEND);
     for (let i = 0; i < this.boardWaypoints.length; i++) {
-      render(new WaypointsView(), this.component.getElement(), RenderPosition.BEFOREEND);
+      render(new PointView(), this.component.getElement(), RenderPosition.BEFOREEND);
     }
     render(new Filter(), filterContainer, RenderPosition.BEFOREEND);
   }

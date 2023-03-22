@@ -1,5 +1,5 @@
 import {createElement} from '../render';
-import {humanizeDate} from '../util';
+import {getDifferenceTime, humanizeDateTo} from '../util';
 
 
 const createPointTemplate = (point) => {
@@ -7,24 +7,26 @@ const createPointTemplate = (point) => {
 
   const destinationName = destination.name;
   const isFavoriteButtonClass = isFavorite ? 'event__favorite-btn--active' : '';
-  const humanizedDateFrom = dateFrom !== null ? humanizeDate(dateFrom) : '';
-  const humanizedDateTo = dateTo !== null ? humanizeDate(dateTo) : '';
+  const humanizedDateFrom = dateFrom !== null ? humanizeDateTo(dateFrom, 'HH mm') : '';
+  const humanizedDateTo = dateTo !== null ? humanizeDateTo(dateTo, 'HH mm') : '';
+  const differenceTime = getDifferenceTime(dateFrom, dateTo);
+  const dateMonthDay = dateFrom !== null ? humanizeDateTo(dateFrom, 'MMM d'): '';
 
   return (
     `<li class="trip-events__item">
               <div class="event">
-                <time class="event__date" datetime="2019-03-18">MAR 18</time>
+                <time class="event__date" datetime="2019-03-18">${dateMonthDay}</time>
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
                 <h3 class="event__title">${type} ${destinationName}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
-                    <time class="event__start-time" datetime="2019-03-18T10:30">${humanizedDateFrom}</time>
+                    <time class="event__start-time" datetime="${dateFrom}">${humanizedDateFrom}</time>
                     &mdash;
-                    <time class="event__end-time" datetime="2019-03-18T11:00">${humanizedDateTo}</time>
+                    <time class="event__end-time" datetime="${dateTo}">${humanizedDateTo}</time>
                   </p>
-                  <p class="event__duration">30M</p>
+                  <p class="event__duration">${differenceTime}</p>
                 </div>
                 <p class="event__price">
                   &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
@@ -52,9 +54,8 @@ const createPointTemplate = (point) => {
 };
 
 export default class PointsView {
-  constructor(point, destination) {
+  constructor(point) {
     this.point = point;
-    this.destination = destination;
   }
 
   getTemplate() {

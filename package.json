@@ -14,7 +14,7 @@
     "eslint": "eslint src/",
     "test": "npm run eslint",
     "build": "webpack --mode production",
-    "start": "webpack serve --mode development --open --port 9032"
+    "start": "webpack serve --mode development --open"
   },
   "devDependencies": {
     "@babel/core": "7.16.0",

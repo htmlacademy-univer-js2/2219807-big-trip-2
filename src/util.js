@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-const humanizeDate = (date) => dayjs(date).format('HH MM');
+const humanizeDateTo = (date, template) => dayjs(date).format(template);
 const getRandomInteger = (max) => Math.floor(Math.random() * max);
 const getRandomIntegerInterval = (min, max) => {
   const lower = Math.ceil(Math.min(min, max));
@@ -13,8 +13,27 @@ const getRandomBoolean = () => Math.round(Math.random()) === 1;
 const getRandomArrayElement = (array) => array[getRandomInteger(array.length)];
 const getRandomDate = (timeGap) => {
   const countTimeGap = getRandomIntegerInterval(-timeGap, timeGap);
-
-  return dayjs().add(countTimeGap, 'minutes').toDate();
+  return dayjs().add(countTimeGap, 'minutes').format('YYYY-MM-DDTHH:mm');
 };
 
-export {getRandomInteger, humanizeDate, getRandomBoolean, getRandomArrayElement, getRandomDate, getRandomIntegerInterval};
+const getDifferenceTime = (dateFrom, dateTo) => {
+  let differenceMinutes = dayjs(dateTo).format('mm') - dayjs(dateFrom).format('mm');
+  let differenceHours = dayjs(dateTo).format('HH') - dayjs(dateFrom).format('HH');
+
+  if (differenceMinutes < 0) {
+    differenceHours--;
+    differenceMinutes += 60;
+  }
+
+  return `${differenceHours} HOURS - ${differenceMinutes} MINUTES`;
+};
+
+export {
+  getRandomInteger,
+  humanizeDateTo,
+  getRandomBoolean,
+  getRandomArrayElement,
+  getRandomDate,
+  getRandomIntegerInterval,
+  getDifferenceTime
+};

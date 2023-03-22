@@ -15,6 +15,6 @@ const imageReference = 'http://picsum.photos/248/152?r=';
 const tripType = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 const maxImageId = 1000;
-const daysGap = 10;
+const minutesGap = 3000;
 
-export {pointDescriptions, imageReference, maxImageId, countries, tripType, daysGap};
+export {pointDescriptions, imageReference, maxImageId, countries, tripType, minutesGap};

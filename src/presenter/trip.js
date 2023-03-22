@@ -15,15 +15,17 @@ class Trip {
 
   init(filterContainer, pointModel) {
     this.pointModel = pointModel;
-    this.boardPoints = [...this.pointModel.points];
+    this.boardPoints = [...this.pointModel.getPoints()];
 
     render(new SortView(), this.container, RenderPosition.BEFOREEND);
     render(this.component, this.container);
     render(new CreationForm(), this.component.getElement(), RenderPosition.BEFOREEND);
     render(new EditFormView(), this.component.getElement(), RenderPosition.BEFOREEND);
-    for (let i = 0; i < this.boardPoints.length; i++) {
-      render(new PointsView(this.boardPoints[i]), this.component.getElement());
+
+    for (const point of this.boardPoints) {
+      render(new PointsView(point), this.component.getElement());
     }
+
     render(new Filter(), filterContainer, RenderPosition.BEFOREEND);
   }
 }

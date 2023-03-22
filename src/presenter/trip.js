@@ -20,7 +20,7 @@ class Trip {
     render(new SortView(), this.container, RenderPosition.BEFOREEND);
     render(this.component, this.container);
     render(new CreationForm(), this.component.getElement(), RenderPosition.BEFOREEND);
-    render(new EditFormView(), this.component.getElement(), RenderPosition.BEFOREEND);
+    render(new EditFormView(this.boardPoints[0]), this.component.getElement(), RenderPosition.BEFOREEND);
 
     for (const point of this.boardPoints) {
       render(new PointsView(point), this.component.getElement());

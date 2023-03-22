@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-const humanizeDateTo = (date, template) => dayjs(date).format(template);
+const humanizeDate = (date, template) => dayjs(date).format(template);
 const getRandomInteger = (max) => Math.floor(Math.random() * max);
 const getRandomIntegerInterval = (min, max) => {
   const lower = Math.ceil(Math.min(min, max));
@@ -30,7 +30,7 @@ const getDifferenceTime = (dateFrom, dateTo) => {
 
 export {
   getRandomInteger,
-  humanizeDateTo,
+  humanizeDate,
   getRandomBoolean,
   getRandomArrayElement,
   getRandomDate,

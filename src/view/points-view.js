@@ -1,5 +1,5 @@
 import {createElement} from '../render';
-import {getDifferenceTime, humanizeDateTo} from '../util';
+import {getDifferenceTime, humanizeDate} from '../util';
 
 
 const createPointTemplate = (point) => {
@@ -7,10 +7,10 @@ const createPointTemplate = (point) => {
 
   const destinationName = destination.name;
   const isFavoriteButtonClass = isFavorite ? 'event__favorite-btn--active' : '';
-  const humanizedDateFrom = dateFrom !== null ? humanizeDateTo(dateFrom, 'HH mm') : '';
-  const humanizedDateTo = dateTo !== null ? humanizeDateTo(dateTo, 'HH mm') : '';
+  const humanizedDateFrom = dateFrom !== null ? humanizeDate(dateFrom, 'HH mm') : '';
+  const humanizedDateTo = dateTo !== null ? humanizeDate(dateTo, 'HH mm') : '';
   const differenceTime = getDifferenceTime(dateFrom, dateTo);
-  const dateMonthDay = dateFrom !== null ? humanizeDateTo(dateFrom, 'MMM d'): '';
+  const dateMonthDay = dateFrom !== null ? humanizeDate(dateFrom, 'MMM d'): '';
 
   return (
     `<li class="trip-events__item">

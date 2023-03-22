@@ -1,7 +1,7 @@
 import {generateOffer} from './offer';
 import {getRandomArrayElement, getRandomBoolean, getRandomDate, getRandomIntegerInterval} from '../util';
 import {generateDestination} from './destination';
-import {minutesGap, tripType} from '../const';
+import {minutesGap, tripTypes} from '../const';
 
 
 export const generatePoints = () => (
@@ -12,5 +12,5 @@ export const generatePoints = () => (
     destination: generateDestination(),
     isFavorite: getRandomBoolean(),
     offers: generateOffer(),
-    type: getRandomArrayElement(tripType)
+    type: getRandomArrayElement(tripTypes)
   });

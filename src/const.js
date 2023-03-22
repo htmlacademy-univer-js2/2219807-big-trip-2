@@ -12,9 +12,9 @@ const countries = ['Moscow', 'Ekaterinburg', 'Paris'];
 
 const imageReference = 'http://picsum.photos/248/152?r=';
 
-const tripType = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const tripTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 const maxImageId = 1000;
-const minutesGap = 3000;
+const minutesGap = 30;
 
-export {pointDescriptions, imageReference, maxImageId, countries, tripType, minutesGap};
+export {pointDescriptions, imageReference, maxImageId, countries, tripTypes, minutesGap};

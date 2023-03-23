@@ -10,7 +10,6 @@ const createPointTemplate = (point, destinations) => {
   const humanizedDateTo = dateTo !== null ? humanizeDate(dateTo, 'HH mm') : '';
   const differenceTime = getDifferenceTime(dateFrom, dateTo);
   const dateMonthDay = dateFrom !== null ? humanizeDate(dateFrom, 'MMM d'): '';
-  console.log(pointDestination);
 
   return (
     `<li class="trip-events__item">

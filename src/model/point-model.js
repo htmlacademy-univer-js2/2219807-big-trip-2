@@ -1,5 +1,5 @@
-import {generatePoints, points} from '../mock/point';
-import {destinations, generateDestination} from '../mock/destinations';
+import {points} from '../mock/point';
+import {destinations} from '../mock/destinations';
 
 export default class PointModel {
   constructor() {

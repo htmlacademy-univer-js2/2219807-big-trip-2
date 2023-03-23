@@ -2,15 +2,15 @@ import {createElement} from '../render';
 import {getDifferenceTime, humanizeDate} from '../util';
 
 
-const createPointTemplate = (point) => {
-  const {basePrice, dateFrom, dateTo, destination, isFavorite, type} = point;
-
-  const destinationName = destination.name;
+const createPointTemplate = (point, destinations) => {
+  const {basePrice, dateFrom, dateTo, isFavorite, type} = point;
+  const pointDestination = destinations.find((destination) => destination.id === point.destination);
   const isFavoriteButtonClass = isFavorite ? 'event__favorite-btn--active' : '';
   const humanizedDateFrom = dateFrom !== null ? humanizeDate(dateFrom, 'HH mm') : '';
   const humanizedDateTo = dateTo !== null ? humanizeDate(dateTo, 'HH mm') : '';
   const differenceTime = getDifferenceTime(dateFrom, dateTo);
   const dateMonthDay = dateFrom !== null ? humanizeDate(dateFrom, 'MMM d'): '';
+  console.log(pointDestination);
 
   return (
     `<li class="trip-events__item">
@@ -19,7 +19,7 @@ const createPointTemplate = (point) => {
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
-                <h3 class="event__title">${type} ${destinationName}</h3>
+                <h3 class="event__title">${type} ${pointDestination.name}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
                     <time class="event__start-time" datetime="${dateFrom}">${humanizedDateFrom}</time>
@@ -54,12 +54,13 @@ const createPointTemplate = (point) => {
 };
 
 export default class PointsView {
-  constructor(point) {
+  constructor(point, destinations) {
     this.point = point;
+    this.destinations = destinations;
   }
 
   getTemplate() {
-    return createPointTemplate(this.point);
+    return createPointTemplate(this.point, this.destinations);
   }
 
   getElement() {

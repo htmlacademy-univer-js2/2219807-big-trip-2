@@ -1,11 +1,17 @@
-import {generatePoints} from '../mock/point';
+import {generatePoints, points} from '../mock/point';
+import {destinations, generateDestination} from '../mock/destinations';
 
 export default class PointModel {
   constructor() {
-    this.points = Array.from({length: 10}, generatePoints);
+    this.points = points;
+    this.destinations = destinations;
   }
 
   getPoints() {
     return this.points;
+  }
+
+  getDestinations() {
+    return this.destinations;
   }
 }

@@ -28,6 +28,15 @@ const getDifferenceTime = (dateFrom, dateTo) => {
   return `${differenceHours} HOURS - ${differenceMinutes} MINUTES`;
 };
 
+const upFirstChar = (line) => line !== '' ? line[0].toUpperCase() + line.slice(1) : '';
+
+
+const enumerateTypesTrip = (tripType, point) => `
+        <div class="event__type-item">
+            <input id="event-type-${tripType}-${point.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${tripType}">
+            <label class="event__type-label  event__type-label--${tripType}" for="event-type-${tripType}-${point.id}}">$${upFirstChar(tripType)}</label>
+        </div>`;
+
 export {
   getRandomInteger,
   humanizeDate,
@@ -35,5 +44,6 @@ export {
   getRandomArrayElement,
   getRandomDate,
   getRandomIntegerInterval,
-  getDifferenceTime
+  getDifferenceTime,
+  enumerateTypesTrip
 };

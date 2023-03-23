@@ -2,11 +2,11 @@ import {createElement} from '../render';
 import {enumerateTypesTrip, humanizeDate} from '../util';
 import {tripTypes} from '../const';
 
-const createEditForm = (point) => {
+const createEditForm = (point, destinations) => {
   let {dateFrom, dateTo} = point;
   dateFrom = humanizeDate(dateFrom, 'd/MM/YY HH:mm');
   dateTo = humanizeDate(dateTo, 'd/MM/YY HH:mm');
-
+  const pointDestination = destinations.find((destination) => destination.id === point.destination);
 
   return (`
 <form class="event event--edit" action="#" method="post">
@@ -30,7 +30,7 @@ const createEditForm = (point) => {
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${point.type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Chamonix" list="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${pointDestination.name} list="destination-list-1">
                     <datalist id="destination-list-1">
                       <option value="Amsterdam"></option>
                       <option value="Geneva"></option>
@@ -114,19 +114,27 @@ const createEditForm = (point) => {
 
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">Chamonix-Mont-Blanc (usually shortened to Chamonix) is a resort area near the junction of France, Switzerland and Italy. At the base of Mont Blanc, the highest summit in the Alps, it's renowned for its skiing.</p>
+                    <p class="event__destination-description">${pointDestination.description}</p>
+
+                    <div class="event__photos-container">
+                      <div class="event__photos-tape">
+                      ${pointDestination.pictures.map((pic) => `<img class="event__photo" src="${pic.src}" alt="Event photo">`)}
+
+                      </div>
+                    </div>
                   </section>
                 </section>
               </form>`
   );
 };
 export default class EditFormView {
-  constructor(point) {
+  constructor(point, destinations) {
     this.point = point;
+    this.destinations = destinations;
   }
 
   getTemplate() {
-    return createEditForm(this.point);
+    return createEditForm(this.point, this.destinations);
   }
 
   getElement() {

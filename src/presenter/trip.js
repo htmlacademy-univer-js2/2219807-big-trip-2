@@ -20,14 +20,15 @@ class Trip {
     this.pointModel = pointModel;
     this.destinations = this.pointModel.getDestinations();
     this.boardPoints = [...this.pointModel.getPoints()];
+    const offersByType = this.pointModel.getOffersByType();
 
     render(new SortView(), this.container, RenderPosition.BEFOREEND);
     render(this.component, this.container);
     render(new CreationForm(), this.component.getElement(), RenderPosition.BEFOREEND);
-    render(new EditFormView(this.boardPoints[0], destinations), this.component.getElement(), RenderPosition.BEFOREEND);
+    render(new EditFormView(this.boardPoints[0], destinations, offersByType), this.component.getElement(), RenderPosition.BEFOREEND);
 
     for (const point of this.boardPoints) {
-      render(new PointsView(point, destinations), this.component.getElement());
+      render(new PointsView(point, destinations, offersByType), this.component.getElement());
     }
 
     render(new Filter(), filterContainer, RenderPosition.BEFOREEND);

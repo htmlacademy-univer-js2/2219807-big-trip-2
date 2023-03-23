@@ -1,4 +1,4 @@
-import {generateOffer} from './offer';
+import {offers} from './offer';
 import {getRandomArrayElement, getRandomBoolean, getRandomDate, getRandomIntegerInterval} from '../util';
 import {generateDestination} from './destinations';
 import {minutesGap, tripTypes} from '../const';
@@ -11,7 +11,7 @@ const generatePoints = () => ({
   destination: generateDestination(),
   id: 2,
   isFavorite: getRandomBoolean(),
-  offers: generateOffer(),
+  offers: offers,
   type: getRandomArrayElement(tripTypes)
 });
 
@@ -22,7 +22,7 @@ const points = [{
   destination: 1,
   id: 1,
   isFavorite: true,
-  offers: [],
+  offers: [8,9],
   type: 'flight'
 }, {
   basePrice: 1400,
@@ -31,7 +31,7 @@ const points = [{
   destination: 3,
   id: 3,
   isFavorite: false,
-  offers: [],
+  offers: [1,2,3,4,5],
   type: 'taxi'
 }, {
   basePrice: 200,
@@ -40,7 +40,7 @@ const points = [{
   destination: 2,
   id: 1,
   isFavorite: true,
-  offers: [],
+  offers: [6,7],
   type: 'bus'
 },];
 

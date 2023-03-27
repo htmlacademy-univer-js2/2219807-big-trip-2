@@ -11,6 +11,11 @@ export const offers = [
         id: 2,
         title: 'taxi offer 3',
         price: 324
+      },
+      {
+        id: 3,
+        title: 'taxi offer 10',
+        price: 31
       }
     ]
   },

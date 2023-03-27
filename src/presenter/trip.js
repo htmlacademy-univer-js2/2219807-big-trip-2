@@ -1,8 +1,8 @@
 import {render, RenderPosition} from '../render';
 import PointsView from '../view/points-view';
 import SortView from '../view/sort';
-import CreationForm from '../view/creation-form';
-import EditFormView from '../view/edit-form';
+import PointNewForm from '../view/point-new-form';
+import EditFormView from '../view/point-edit-form';
 import PointsList from '../view/points-list';
 import Filter from '../view/filters';
 import PointModel from '../model/point-model';
@@ -24,8 +24,8 @@ class Trip {
 
     render(new SortView(), this.container, RenderPosition.BEFOREEND);
     render(this.component, this.container);
-    render(new CreationForm(), this.component.getElement(), RenderPosition.BEFOREEND);
-    render(new EditFormView(this.boardPoints[0], destinations, offersByType), this.component.getElement(), RenderPosition.BEFOREEND);
+    render(new PointNewForm(), this.component.getElement(), RenderPosition.BEFOREEND);
+    render(new EditFormView(this.boardPoints[1], destinations, offersByType), this.component.getElement(), RenderPosition.BEFOREEND);
 
     for (const point of this.boardPoints) {
       render(new PointsView(point, destinations, offersByType), this.component.getElement());

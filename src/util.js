@@ -37,6 +37,8 @@ const enumerateTypesTrip = (tripType, point) => `
             <label class="event__type-label  event__type-label--${tripType}" for="event-type-${tripType}-${point.id}}">$${upFirstChar(tripType)}</label>
         </div>`;
 
+const reformatOfferTitles = (title) => title.split(' ').join('_');
+
 export {
   getRandomInteger,
   humanizeDate,
@@ -45,5 +47,6 @@ export {
   getRandomDate,
   getRandomIntegerInterval,
   getDifferenceTime,
-  enumerateTypesTrip
+  enumerateTypesTrip,
+  reformatOfferTitles
 };

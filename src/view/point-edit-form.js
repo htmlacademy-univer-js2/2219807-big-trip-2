@@ -1,12 +1,14 @@
 import {createElement} from '../render';
-import {enumerateTypesTrip, humanizeDate} from '../util';
+import {enumerateTypesTrip, humanizeDate, reformatOfferTitles} from '../util';
 import {tripTypes} from '../const';
 
-const createEditForm = (point, destinations) => {
+const createEditForm = (point, destinations, offersByType) => {
   let {dateFrom, dateTo} = point;
   dateFrom = humanizeDate(dateFrom, 'd/MM/YY HH:mm');
   dateTo = humanizeDate(dateTo, 'd/MM/YY HH:mm');
   const pointDestination = destinations.find((destination) => destination.id === point.destination);
+  const pointTypeOffers = offersByType.find((offer) => offer.type === point.type).offers;
+  const pointOffers = pointTypeOffers.filter((offer) => point.offers.includes(offer.id));
 
   return (`
 <form class="event event--edit" action="#" method="post">
@@ -65,50 +67,18 @@ const createEditForm = (point, destinations) => {
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
-                      <div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-                        <label class="event__offer-label" for="event-offer-luggage-1">
-                          <span class="event__offer-title">Add luggage</span>
-                          &plus;&euro;&nbsp;
-                          <span class="event__offer-price">50</span>
-                        </label>
-                      </div>
 
-                      <div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
-                        <label class="event__offer-label" for="event-offer-comfort-1">
-                          <span class="event__offer-title">Switch to comfort</span>
+                    ${pointOffers.map((typeOffer) => (
+      `<div class="event__offer-selector">
+                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${reformatOfferTitles(typeOffer.title)}-1"
+                         type="checkbox" name="event-offer-${reformatOfferTitles(typeOffer.title)}" ${point.offers.includes(typeOffer.id) ? 'checked' : ''}>
+                        <label class="event__offer-label" for="event-offer-${reformatOfferTitles(typeOffer.title)}-1">
+                          <span class="event__offer-title">${typeOffer.title}</span>
                           &plus;&euro;&nbsp;
-                          <span class="event__offer-price">80</span>
+                          <span class="event__offer-price">${typeOffer.price}</span>
                         </label>
-                      </div>
+                      </div>`)).join('')}
 
-                      <div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-                        <label class="event__offer-label" for="event-offer-meal-1">
-                          <span class="event__offer-title">Add meal</span>
-                          &plus;&euro;&nbsp;
-                          <span class="event__offer-price">15</span>
-                        </label>
-                      </div>
-
-                      <div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-                        <label class="event__offer-label" for="event-offer-seats-1">
-                          <span class="event__offer-title">Choose seats</span>
-                          &plus;&euro;&nbsp;
-                          <span class="event__offer-price">5</span>
-                        </label>
-                      </div>
-
-                      <div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-                        <label class="event__offer-label" for="event-offer-train-1">
-                          <span class="event__offer-title">Travel by train</span>
-                          &plus;&euro;&nbsp;
-                          <span class="event__offer-price">40</span>
-                        </label>
-                      </div>
                     </div>
                   </section>
 
@@ -128,13 +98,14 @@ const createEditForm = (point, destinations) => {
   );
 };
 export default class EditFormView {
-  constructor(point, destinations) {
+  constructor(point, destinations, offersByType) {
     this.point = point;
     this.destinations = destinations;
+    this.offersByType = offersByType;
   }
 
   getTemplate() {
-    return createEditForm(this.point, this.destinations);
+    return createEditForm(this.point, this.destinations, this.offersByType);
   }
 
   getElement() {

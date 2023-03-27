@@ -113,7 +113,7 @@ const createAddNewPoint = () => (
               </form>`
 );
 
-export default class CreationForm {
+export default class PointNewForm {
   getTemplate() {
     return createAddNewPoint();
   }

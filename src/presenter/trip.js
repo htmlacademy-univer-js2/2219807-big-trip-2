@@ -7,6 +7,7 @@ import PointsList from '../view/points-list';
 import Filter from '../view/filters';
 import PointModel from '../model/point-model';
 import {destinations} from '../mock/destinations';
+import {offers} from '../mock/offer';
 
 
 class Trip {
@@ -18,17 +19,17 @@ class Trip {
 
   init(filterContainer, pointModel) {
     this.pointModel = pointModel;
-    this.destinations = this.pointModel.getDestinations();
+    this.destination = this.pointModel.getDestinations();
     this.boardPoints = [...this.pointModel.getPoints()];
     const offersByType = this.pointModel.getOffersByType();
 
     render(new SortView(), this.container, RenderPosition.BEFOREEND);
     render(this.component, this.container);
     render(new PointNewForm(), this.component.getElement(), RenderPosition.BEFOREEND);
-    render(new EditFormView(this.boardPoints[1], destinations, offersByType), this.component.getElement(), RenderPosition.BEFOREEND);
+    render(new EditFormView(this.boardPoints[1], destinations, offers), this.component.getElement(), RenderPosition.BEFOREEND);
 
     for (const point of this.boardPoints) {
-      render(new PointsView(point, destinations, offersByType), this.component.getElement());
+      render(new PointsView(point, destinations, offers), this.component.getElement());
     }
 
     render(new Filter(), filterContainer, RenderPosition.BEFOREEND);

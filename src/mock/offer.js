@@ -1,52 +1,23 @@
+import {getRandomArrayElement, getRandomInteger} from '../util';
+import {TITLES_OFFER} from '../const';
+
+export const generateOffers = (id) => ({
+  id: id,
+  title: getRandomArrayElement(TITLES_OFFER),
+  price: getRandomInteger(300)
+});
+
 export const offers = [
   {
     type: 'taxi',
-    offers: [
-      {
-        id: 1,
-        title: 'taxi offer',
-        price: 120
-      },
-      {
-        id: 2,
-        title: 'taxi offer 3',
-        price: 324
-      },
-      {
-        id: 3,
-        title: 'taxi offer 10',
-        price: 31
-      }
-    ]
+    offers: [generateOffers(1), generateOffers(2), generateOffers(3)]
   },
   {
     type: 'bus',
-    offers: [
-      {
-        id: 6,
-        title: 'bus offer 1',
-        price: 512
-      },
-      {
-        id: 7,
-        title: 'bus offer 2',
-        price: 123
-      }
-    ]
+    offers: [generateOffers(4), generateOffers(5)]
   },
   {
     type: 'flight',
-    offers: [
-      {
-        id: 8,
-        title: 'Flight offer 1',
-        price: 418
-      },
-      {
-        id: 9,
-        title: 'Flight offer 2',
-        price: 915
-      }
-    ]
+    offers: [generateOffers(6), generateOffers(7), generateOffers(8)]
   }
 ];

@@ -1,50 +1,15 @@
-import {countries, imageReference, maxImageId, pointDescriptions} from '../const';
+import {COUNTRIES, IMAGE_REFERENCE, MAX_IMAGE_ID, POINT_DESCRIPTIONS} from '../const';
 import {getRandomInteger} from '../util';
 
-const getRandomDescription = () => pointDescriptions[getRandomInteger(pointDescriptions.length - 1)];
-const getRandomCountry = () => countries[getRandomInteger(countries.length - 1)];
-const getRandomPicture = () => `${imageReference}${getRandomInteger(maxImageId)}`;
+const getRandomDescription = () => POINT_DESCRIPTIONS[getRandomInteger(POINT_DESCRIPTIONS.length - 1)];
+const getRandomCountry = () => COUNTRIES[getRandomInteger(COUNTRIES.length - 1)];
+const getRandomPicture = () => `${IMAGE_REFERENCE}${getRandomInteger(MAX_IMAGE_ID)}`;
 
-const generateDestination = () => ({
-  id: 2, description: getRandomDescription(), name: getRandomCountry(), pictures: [{
-    src: getRandomPicture(), description: getRandomDescription()
-  }]
+const generateDestination = (id) => ({
+  id: id,
+  description: getRandomDescription(),
+  name: getRandomCountry(),
+  pictures : Array.from({length: getRandomInteger(3)}, getRandomPicture, getRandomDescription())
 });
 
-const destinations = [
-  {
-    id: 1,
-    description: 'ex test 3',
-    name: 'ex city 3',
-    pictures: [
-      {
-        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
-        description: 'ex city 3 parliament building'
-      }
-    ]
-  },
-  {
-    id: 2,
-    description: 'ex test 2',
-    name: 'ex city 2',
-    pictures: [
-      {
-        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
-        description: 'ex city 2 parliament building'
-      }
-    ]
-  },
-  {
-    id: 3,
-    description: 'ex test 1',
-    name: 'ex city 1',
-    pictures: [
-      {
-        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
-        description: 'ex city 1 parliament building'
-      }
-    ]
-  }
-];
-
-export {generateDestination, destinations};
+export const destinations = [generateDestination(1), generateDestination(2), generateDestination(3)];

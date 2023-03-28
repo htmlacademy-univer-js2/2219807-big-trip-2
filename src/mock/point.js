@@ -1,19 +1,21 @@
 import {offers} from './offer';
-import {getRandomBoolean, getRandomDate, getRandomIntegerInterval} from '../util';
-import {destinations} from './destinations';
-import {MINUTES_GAP} from '../const';
+import {getRandomArrayElement, getRandomBoolean, getRandomDate, getRandomIntegerInterval} from '../util';
+import {MINUTES_GAP, TRIP_TYPES} from '../const';
 
-const generatePoints = (id, type) => ({
+let destinationId = 1;
+let pointId = 1;
+
+
+const generatePoints = () => ({
   basePrice: getRandomIntegerInterval(10, 300),
   dateFrom: getRandomDate(MINUTES_GAP),
   dateTo: getRandomDate(MINUTES_GAP),
-  destination: destinations,
-  id: id,
+  destination: destinationId++,
+  id: pointId++,
   isFavorite: getRandomBoolean(),
   offers: offers,
-  type: type
+  type: getRandomArrayElement(TRIP_TYPES)
 });
 
-const points = [generatePoints(1, 'bus'), generatePoints(2, 'taxi'), generatePoints(3, 'flight')];
 
-export {points};
+export {generatePoints};

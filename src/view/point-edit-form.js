@@ -3,10 +3,8 @@ import {enumerateTypesTrip, humanizeDate, reformatOfferTitles} from '../util';
 import {TRIP_TYPES} from '../const';
 
 const createEditForm = (point, destinations, offersByType) => {
-  let {dateFrom, dateTo} = point;
-  dateFrom = humanizeDate(dateFrom, 'd/MM/YY HH:mm');
-  dateTo = humanizeDate(dateTo, 'd/MM/YY HH:mm');
-
+  const dateFrom = humanizeDate(point.dateFrom, 'DD/MM/YY HH:mm');
+  const dateTo = humanizeDate(point.dateTo, 'DD/MM/YY HH:mm');
   const pointTypeOffers = offersByType.find((offer) => offer.type === point.type).offers;
   const pointOffers = pointTypeOffers.filter((offer) => point.offers.includes(offer.id));
   const pointDestination = destinations.find((destination) => destination.id === point.destination);
@@ -34,8 +32,8 @@ const createEditForm = (point, destinations, offersByType) => {
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${point.type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${pointDestination.name} list="destination-list-1">
-                    <datalist id="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-${point.id}" type="text" name="event-destination" value=${pointDestination.name} list="destination-list-${point.id}">
+                    <datalist id="destination-list-${point.id}">
                       <option value="Amsterdam"></option>
                       <option value="Geneva"></option>
                       <option value="Chamonix"></option>

@@ -98,24 +98,28 @@ const createEditForm = (point, destinations, offersByType) => {
   );
 };
 export default class EditFormView {
+  #element;
+  #point;
+  #destinations;
+  #offersByType;
   constructor(point, destinations, offersByType) {
-    this.point = point;
-    this.destinations = destinations;
-    this.offersByType = offersByType;
+    this.#point = point;
+    this.#destinations = destinations;
+    this.#offersByType = offersByType;
   }
 
   getTemplate() {
-    return createEditForm(this.point, this.destinations, this.offersByType);
+    return createEditForm(this.#point, this.#destinations, this.#offersByType);
   }
 
   getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+    if (!this.#element) {
+      this.#element = createElement(this.getTemplate());
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

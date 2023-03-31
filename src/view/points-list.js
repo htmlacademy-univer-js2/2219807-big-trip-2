@@ -5,21 +5,20 @@ const createPointsList = () => (
     </ul>`
 );
 
-class PointsList {
+export default class PointsList {
+  #element;
   getTemplate() {
     return createPointsList();
   }
 
   getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+    if (!this.#element) {
+      this.#element = createElement(this.getTemplate());
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
-}
-
-export default PointsList;
+};

@@ -7,13 +7,13 @@ const createPointsList = () => (
 
 export default class PointsList {
   #element;
-  getTemplate() {
+  get template() {
     return createPointsList();
   }
 
-  getElement() {
+  get element() {
     if (!this.#element) {
-      this.#element = createElement(this.getTemplate());
+      this.#element = createElement(this.template);
     }
     return this.#element;
   }

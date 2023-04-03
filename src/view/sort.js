@@ -31,13 +31,13 @@ const createSort = () => (
 
 export default class SortView {
   #element;
-  getTemplate() {
+  get template() {
     return createSort();
   }
 
-  getElement() {
+  get element() {
     if (!this.#element) {
-      this.#element = createElement(this.getTemplate());
+      this.#element = createElement(this.template);
     }
     return this.#element;
   }

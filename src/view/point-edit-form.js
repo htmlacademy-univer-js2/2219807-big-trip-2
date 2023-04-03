@@ -108,13 +108,13 @@ export default class EditFormView {
     this.#offersByType = offersByType;
   }
 
-  getTemplate() {
+  get template() {
     return createEditForm(this.#point, this.#destinations, this.#offersByType);
   }
 
-  getElement() {
+  get element() {
     if (!this.#element) {
-      this.#element = createElement(this.getTemplate());
+      this.#element = createElement(this.template);
     }
     return this.#element;
   }

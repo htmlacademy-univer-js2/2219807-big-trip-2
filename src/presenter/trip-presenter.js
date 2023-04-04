@@ -6,6 +6,7 @@ import EditFormView from '../view/point-edit-form';
 import PointsList from '../view/points-list';
 import FiltersView from '../view/filters';
 import PointModel from '../model/point-model';
+import MessageZeroPoints from '../view/empty-points-list';
 
 
 class TripPresenter {
@@ -28,6 +29,11 @@ class TripPresenter {
     this.#pointModel = pointModel;
 
     this.#boardPoints = [...this.#pointModel.points];
+
+    if (this.#boardPoints.length === 0){
+      render(new MessageZeroPoints(), this.#container, RenderPosition.BEFOREEND)
+      return
+    }
 
     render(new SortView(), this.#container, RenderPosition.BEFOREEND);
     render(this.#pointsListComponent, this.#container);

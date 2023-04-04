@@ -57,7 +57,7 @@ const createPointTemplate = (point, destinations, offersByType) => {
 };
 
 export default class PointsView {
-  #element = null;
+  #element;
   #point
   #destinations
   #offers

@@ -6,49 +6,81 @@ import EditFormView from '../view/point-edit-form';
 import PointsList from '../view/points-list';
 import FiltersView from '../view/filters';
 import PointModel from '../model/point-model';
-import {destinations} from '../mock/destinations';
-import {offers} from '../mock/offer';
 
 
 class TripPresenter {
   #boardPoints;
   #pointModel;
   #filterContainer;
-  #destinations;
-  #offers;
-  #component;
+  #pointsListComponent;
   #container;
 
   constructor({container}) {
-    this.#component = new PointsList();
+    this.#pointsListComponent = new PointsList();
     this.#container = container;
     this.#pointModel = new PointModel();
   }
 
   init(filterContainer, pointModel) {
+    const destinations = this.#pointModel.destinations;
+    const offers = this.#pointModel.offers;
     this.#filterContainer = filterContainer;
     this.#pointModel = pointModel;
-    this.#destinations = this.#pointModel.destinations;
+
     this.#boardPoints = [...this.#pointModel.points];
-    this.#offers = offers;
 
     render(new SortView(), this.#container, RenderPosition.BEFOREEND);
-    render(this.#component, this.#container);
-    render(new PointNewForm(), this.#component.element, RenderPosition.BEFOREEND);
-    render(new EditFormView(this.#boardPoints[1], this.#destinations, this.#offers), this.#component.element, RenderPosition.BEFOREEND);
+    render(this.#pointsListComponent, this.#container);
+    render(new PointNewForm(), this.#pointsListComponent.element, RenderPosition.BEFOREEND);
 
     for (const point of this.#boardPoints) {
-      this.#renderPoint(point);
+      this.#renderPoint(point, destinations, offers);
     }
 
     render(new FiltersView(), this.#filterContainer, RenderPosition.BEFOREEND);
   }
 
-  #renderPoint = (point) => {
-    const pointComponent = new PointsView(point, this.#destinations, this.#offers);
+  #renderPoint = (point, destinations, offers) => {
+    const pointComponent = new PointsView(point, destinations, offers);
+    const pointEditComponent = new EditFormView(point, destinations, offers);
 
-    render(pointComponent, this.#component.element);
-  }
+    const turnIntoEdit = () => {
+      this.#pointsListComponent.element.replaceChild(pointEditComponent.element, pointComponent.element);
+    };
+
+    const turnIntoPoint = () => {
+      this.#pointsListComponent.element.replaceChild(pointComponent.element, pointEditComponent.element);
+    };
+
+    const onEscKeyup = (evt) => {
+      if (evt.key === 'Escape') {
+        turnIntoPoint();
+        document.removeEventListener('keyup', onEscKeyup);
+      }
+    };
+
+    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      turnIntoEdit();
+      document.addEventListener('keyup', onEscKeyup);
+    });
+
+    pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      turnIntoPoint();
+    });
+
+    pointEditComponent.element.querySelector('.event__save-btn').addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      turnIntoPoint();
+      document.addEventListener('keyup', onEscKeyup);
+    }); // В консоле пишет, что pointEditComponent.element.querySelector('.event--edit') === null
+
+    // pointEditComponent.element.querySelector('.event--edit').addEventListener('reset', (evt) => {
+    //   evt.preventDefault();
+    //   turnIntoPoint();
+    // });
+
+    render(pointComponent, this.#pointsListComponent.element);
+  };
 }
 
 export default TripPresenter;

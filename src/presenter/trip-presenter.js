@@ -30,9 +30,9 @@ class TripPresenter {
 
     this.#boardPoints = [...this.#pointModel.points];
 
-    if (this.#boardPoints.length === 0){
-      render(new MessageZeroPoints(), this.#container, RenderPosition.BEFOREEND)
-      return
+    if (this.#boardPoints.length === 0) {
+      render(new MessageZeroPoints(), this.#container, RenderPosition.BEFOREEND);
+      return;
     }
 
     render(new SortView(), this.#container, RenderPosition.BEFOREEND);

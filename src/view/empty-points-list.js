@@ -1,14 +1,11 @@
 import {createElement} from '../render';
 
-const createPointsList = () => (
-  `<ul class="trip-events__list">
-    </ul>`
-);
+const createMessageZeroPoints = () => '<p class="trip-events__msg">Click New Event to create your first point</p>';
 
-export default class PointsList {
+export default class MessageZeroPoints {
   #element;
   get template() {
-    return createPointsList();
+    return createMessageZeroPoints();
   }
 
   get element() {
@@ -22,3 +19,5 @@ export default class PointsList {
     this.#element = null;
   }
 }
+
+

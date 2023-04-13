@@ -6,6 +6,7 @@ import EditFormView from '../view/point-edit-form';
 import PointsList from '../view/points-list';
 import FiltersView from '../view/filters';
 import PointModel from '../model/point-model';
+import MessageZeroPoints from '../view/empty-points-list';
 
 
 class TripPresenter {
@@ -28,6 +29,11 @@ class TripPresenter {
     this.#pointModel = pointModel;
 
     this.#boardPoints = [...this.#pointModel.points];
+
+    if (this.#boardPoints.length === 0) {
+      render(new MessageZeroPoints(), this.#container, RenderPosition.BEFOREEND);
+      return;
+    }
 
     render(new SortView(), this.#container, RenderPosition.BEFOREEND);
     render(this.#pointsListComponent, this.#container);
@@ -54,30 +60,32 @@ class TripPresenter {
 
     const onEscKeyup = (evt) => {
       if (evt.key === 'Escape') {
+        evt.preventDefault();
         turnIntoPoint();
-        document.removeEventListener('keyup', onEscKeyup);
+        document.removeEventListener('keydown', onEscKeyup);
       }
     };
 
     pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       turnIntoEdit();
       document.addEventListener('keyup', onEscKeyup);
+
+      pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+        turnIntoPoint();
+      });
+
+      pointEditComponent.element.querySelector('.event__save-btn').addEventListener('submit', (evt) => {
+        evt.preventDefault();
+        turnIntoPoint();
+        document.addEventListener('keyup', onEscKeyup);
+      });
+
+      pointEditComponent.element.querySelector('.event--edit').addEventListener('reset', (evt) => {
+        evt.preventDefault();
+        turnIntoPoint();
+      });
     });
 
-    pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
-      turnIntoPoint();
-    });
-
-    pointEditComponent.element.querySelector('.event__save-btn').addEventListener('submit', (evt) => {
-      evt.preventDefault();
-      turnIntoPoint();
-      document.addEventListener('keyup', onEscKeyup);
-    }); // В консоле пишет, что pointEditComponent.element.querySelector('.event--edit') === null
-
-    // pointEditComponent.element.querySelector('.event--edit').addEventListener('reset', (evt) => {
-    //   evt.preventDefault();
-    //   turnIntoPoint();
-    // });
 
     render(pointComponent, this.#pointsListComponent.element);
   };

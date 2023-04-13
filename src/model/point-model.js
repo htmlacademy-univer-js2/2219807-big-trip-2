@@ -7,7 +7,7 @@ export default class PointModel {
   #destinations;
   #offers
   constructor() {
-    this.#points = Array.from({length: 0}, generatePoints);
+    this.#points = Array.from({length: 3}, generatePoints);
     this.#destinations = destinations;
     this.#offers = offers;
   }

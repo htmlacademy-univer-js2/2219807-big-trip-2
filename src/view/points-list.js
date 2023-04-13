@@ -21,4 +21,4 @@ export default class PointsList {
   removeElement() {
     this.#element = null;
   }
-};
+}

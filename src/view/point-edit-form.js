@@ -3,14 +3,11 @@ import {enumerateTypesTrip, humanizeDate, reformatOfferTitles} from '../util';
 import {TRIP_TYPES} from '../const';
 
 const createEditForm = (point, destinations, offersByType) => {
-  let {dateFrom, dateTo} = point;
-  dateFrom = humanizeDate(dateFrom, 'd/MM/YY HH:mm');
-  dateTo = humanizeDate(dateTo, 'd/MM/YY HH:mm');
-  // console.log(point.destination);
-  // console.log(destinations);
-  // const pointTypeOffers = offersByType.find((offer) => offer.type === point.type).offers;
-  // const pointOffers = pointTypeOffers.filter((offer) => point.offers.includes(offer.id));
-  // const pointDestination = destinations.find((destination) => destination.id === point.destination);
+  const dateFrom = humanizeDate(point.dateFrom, 'DD/MM/YY HH:mm');
+  const dateTo = humanizeDate(point.dateTo, 'DD/MM/YY HH:mm');
+  const pointTypeOffers = offersByType.find((offer) => offer.type === point.type).offers;
+  const pointOffers = pointTypeOffers.filter((offer) => point.offers.includes(offer.id));
+  const pointDestination = destinations.find((destination) => destination.id === point.destination);
 
 
   return (`
@@ -35,8 +32,8 @@ const createEditForm = (point, destinations, offersByType) => {
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${point.type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=$ list="destination-list-1">
-                    <datalist id="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-${point.id}" type="text" name="event-destination" value=${pointDestination.name} list="destination-list-${point.id}">
+                    <datalist id="destination-list-${point.id}">
                       <option value="Amsterdam"></option>
                       <option value="Geneva"></option>
                       <option value="Chamonix"></option>
@@ -70,11 +67,11 @@ const createEditForm = (point, destinations, offersByType) => {
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
-                    ${offersByType.map((offer) => console.log(offer.offers))}
-                    ${offersByType.map((typeOffer) => (
+
+                    ${pointTypeOffers.map((typeOffer) => (
       `<div class="event__offer-selector">
                         <input class="event__offer-checkbox  visually-hidden" id="event-offer-${reformatOfferTitles(typeOffer.title)}-1"
-                         type="checkbox" name="event-offer-${reformatOfferTitles(typeOffer.title)}" ${point.offers.includes(typeOffer.id) ? 'checked' : ''}>
+                         type="checkbox" name="event-offer-${reformatOfferTitles(typeOffer.title)}" ${pointOffers.includes(typeOffer.id) ? 'checked' : ''}>
                         <label class="event__offer-label" for="event-offer-${reformatOfferTitles(typeOffer.title)}-1">
                           <span class="event__offer-title">${typeOffer.title}</span>
                           &plus;&euro;&nbsp;
@@ -87,12 +84,12 @@ const createEditForm = (point, destinations, offersByType) => {
 
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${point.destination.description}</p>
+                    <p class="event__destination-description">${pointDestination.description}</p>
 
                     <div class="event__photos-container">
                       <div class="event__photos-tape">
-                      ${point.destination.pictures.map((pic) => `<img class="event__photo" src="${pic.src}" alt="Event photo">`)}
 
+                      ${pointDestination.pictures.map((pic) => `<img class="event__photo" src="${pic.src}" alt="Event photo">`).join('')}
                       </div>
                     </div>
                   </section>
@@ -101,24 +98,28 @@ const createEditForm = (point, destinations, offersByType) => {
   );
 };
 export default class EditFormView {
+  #element;
+  #point;
+  #destinations;
+  #offersByType;
   constructor(point, destinations, offersByType) {
-    this.point = point;
-    this.destinations = destinations;
-    this.offersByType = offersByType;
+    this.#point = point;
+    this.#destinations = destinations;
+    this.#offersByType = offersByType;
   }
 
-  getTemplate() {
-    return createEditForm(this.point, this.destinations, this.offersByType);
+  get template() {
+    return createEditForm(this.#point, this.#destinations, this.#offersByType);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

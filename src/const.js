@@ -12,7 +12,7 @@ const COUNTRIES = ['Moscow', 'Ekaterinburg', 'Paris'];
 
 const IMAGE_REFERENCE = 'http://picsum.photos/248/152?r=';
 
-const TRIP_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const TRIP_TYPES = ['taxi', 'bus', 'flight'];
 
 const TITLES_OFFER = ['Stay overnight', 'Add lunch', 'Add a place pet'];
 

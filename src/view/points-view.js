@@ -34,9 +34,10 @@ const createPointTemplate = (point, destinations, offersByType) => {
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
-                ${pointOffers.map((offer) => (`<li class="event__offer">
+                ${pointOffers.map((offer) => (
+      `<li class="event__offer">
                     <span class="event__offer-title">${offer.title}</span>
-                    &plus;&euro;&nbsp;
+                   &plus;&euro;&nbsp;
                     <span class="event__offer-price">${offer.price}</span>
                   </li>`)).join('')}
 
@@ -56,24 +57,29 @@ const createPointTemplate = (point, destinations, offersByType) => {
 };
 
 export default class PointsView {
-  constructor(point, destinations, offersByType) {
-    this.point = point;
-    this.destinations = destinations;
-    this.offersByType = offersByType;
+  #element = null;
+  #point
+  #destinations
+  #offers
+
+  constructor(point, destinations, offers) {
+    this.#point = point;
+    this.#destinations = destinations;
+    this.#offers = offers;
   }
 
-  getTemplate() {
-    return createPointTemplate(this.point, this.destinations, this.offersByType);
+  get template() {
+    return createPointTemplate(this.#point, this.#destinations, this.#offers);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

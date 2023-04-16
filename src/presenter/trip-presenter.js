@@ -74,13 +74,13 @@ class TripPresenter {
         turnIntoPoint();
       });
 
-      pointEditComponent.element.querySelector('.event__save-btn').addEventListener('submit', (evt) => {
+      pointEditComponent.element.querySelector('.event__save-btn').addEventListener('click', (evt) => {
         evt.preventDefault();
         turnIntoPoint();
         document.addEventListener('keyup', onEscKeyup);
       });
 
-      pointEditComponent.element.querySelector('.event--edit').addEventListener('reset', (evt) => {
+      pointEditComponent.element.querySelector('.event__reset-btn').addEventListener('click', (evt) => {
         evt.preventDefault();
         turnIntoPoint();
       });

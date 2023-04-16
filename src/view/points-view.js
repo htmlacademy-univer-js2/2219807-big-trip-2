@@ -58,9 +58,9 @@ const createPointTemplate = (point, destinations, offersByType) => {
 
 export default class PointsView extends AbstractView {
   #element;
-  #point
-  #destinations
-  #offers
+  #point;
+  #destinations;
+  #offers;
 
   constructor(point, destinations, offers) {
     super();
@@ -72,4 +72,14 @@ export default class PointsView extends AbstractView {
   get template() {
     return createPointTemplate(this.#point, this.#destinations, this.#offers);
   }
+
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.addEventListener('click', this.#clickHandler);
+  };
+
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
 }

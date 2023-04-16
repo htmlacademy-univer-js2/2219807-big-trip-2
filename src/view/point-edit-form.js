@@ -97,10 +97,11 @@ const createEditForm = (point, destinations, offersByType) => {
               </form>`
   );
 };
-export default class EditFormView extends AbstractView{
+export default class EditFormView extends AbstractView {
   #point;
   #destinations;
   #offersByType;
+
   constructor(point, destinations, offersByType) {
     super();
     this.#point = point;
@@ -111,4 +112,34 @@ export default class EditFormView extends AbstractView{
   get template() {
     return createEditForm(this.#point, this.#destinations, this.#offersByType);
   }
+
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.addEventListener('click', this.#clickHandler);
+  };
+
+  setSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.addEventListener('submit', this.#submitHandler);
+  };
+
+  setResetHandler = (callback) => {
+    this._callback.formReset = callback;
+    this.element.addEventListener('reset', this.#resetHandler);
+  };
+
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
+
+  #submitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  };
+
+  #resetHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formReset();
+  };
 }

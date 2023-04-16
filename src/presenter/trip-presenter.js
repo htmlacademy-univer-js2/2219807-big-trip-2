@@ -1,12 +1,11 @@
-import {render, RenderPosition} from '../render';
 import PointsView from '../view/points-view';
 import SortView from '../view/sort';
-import PointNewForm from '../view/point-new-form';
 import EditFormView from '../view/point-edit-form';
 import PointsList from '../view/points-list';
 import FiltersView from '../view/filters';
 import PointModel from '../model/point-model';
 import MessageZeroPoints from '../view/empty-points-list';
+import {render} from '../framework/render';
 
 
 class TripPresenter {
@@ -31,19 +30,18 @@ class TripPresenter {
     this.#boardPoints = [...this.#pointModel.points];
 
     if (this.#boardPoints.length === 0) {
-      render(new MessageZeroPoints(), this.#container, RenderPosition.BEFOREEND);
+      render(new MessageZeroPoints(), this.#container);
       return;
     }
 
-    render(new SortView(), this.#container, RenderPosition.BEFOREEND);
+    render(new SortView(), this.#container);
     render(this.#pointsListComponent, this.#container);
-    render(new PointNewForm(), this.#pointsListComponent.element, RenderPosition.BEFOREEND);
 
     for (const point of this.#boardPoints) {
       this.#renderPoint(point, destinations, offers);
     }
 
-    render(new FiltersView(), this.#filterContainer, RenderPosition.BEFOREEND);
+    render(new FiltersView(), this.#filterContainer);
   }
 
   #renderPoint = (point, destinations, offers) => {

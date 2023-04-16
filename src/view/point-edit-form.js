@@ -98,7 +98,6 @@ const createEditForm = (point, destinations, offersByType) => {
   );
 };
 export default class EditFormView extends AbstractView{
-  #element;
   #point;
   #destinations;
   #offersByType;

@@ -5,7 +5,7 @@ import PointsList from '../view/points-list';
 import FiltersView from '../view/filters';
 import PointModel from '../model/point-model';
 import MessageZeroPoints from '../view/empty-points-list';
-import {render} from '../framework/render';
+import {render, replace} from '../framework/render';
 
 
 class TripPresenter {
@@ -49,15 +49,15 @@ class TripPresenter {
     const pointEditComponent = new EditFormView(point, destinations, offers);
 
     const turnIntoEdit = () => {
-      this.#pointsListComponent.element.replaceChild(pointEditComponent.element, pointComponent.element);
+      replace(pointEditComponent, pointComponent);
     };
 
     const turnIntoPoint = () => {
-      this.#pointsListComponent.element.replaceChild(pointComponent.element, pointEditComponent.element);
+      replace(pointComponent, pointEditComponent);
     };
 
     const onEscKeyup = (evt) => {
-      if (evt.key === 'Escape') {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
         turnIntoPoint();
         document.removeEventListener('keydown', onEscKeyup);
@@ -66,17 +66,20 @@ class TripPresenter {
 
     pointComponent.setClickHandler(() => {
       turnIntoEdit();
-      document.addEventListener('keyup', onEscKeyup);
+      document.addEventListener('keydown', onEscKeyup);
 
       pointEditComponent.setClickHandler(turnIntoPoint);
 
       pointEditComponent.setSubmitHandler(() => {
         turnIntoPoint();
+        document.removeEventListener('keydown', onEscKeyup);
       });
 
-      pointEditComponent.setResetHandler(() => turnIntoPoint());
+      pointEditComponent.setResetHandler(() => {
+        turnIntoPoint();
+        document.removeEventListener('keydown', onEscKeyup);
+      });
     });
-
     render(pointComponent, this.#pointsListComponent.element);
   };
 }

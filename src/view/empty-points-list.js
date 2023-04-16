@@ -1,22 +1,10 @@
-import {createElement} from '../render';
+import AbstractView from '../framework/view/abstract-view';
 
 const createMessageZeroPoints = () => '<p class="trip-events__msg">Click New Event to create your first point</p>';
 
-export default class MessageZeroPoints {
-  #element;
+export default class MessageZeroPoints extends AbstractView{
   get template() {
     return createMessageZeroPoints();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
 

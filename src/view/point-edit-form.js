@@ -1,6 +1,6 @@
-import {createElement} from '../render';
 import {enumerateTypesTrip, humanizeDate, reformatOfferTitles} from '../util';
 import {TRIP_TYPES} from '../const';
+import AbstractView from '../framework/view/abstract-view';
 
 const createEditForm = (point, destinations, offersByType) => {
   const dateFrom = humanizeDate(point.dateFrom, 'DD/MM/YY HH:mm');
@@ -97,12 +97,13 @@ const createEditForm = (point, destinations, offersByType) => {
               </form>`
   );
 };
-export default class EditFormView {
+export default class EditFormView extends AbstractView{
   #element;
   #point;
   #destinations;
   #offersByType;
   constructor(point, destinations, offersByType) {
+    super();
     this.#point = point;
     this.#destinations = destinations;
     this.#offersByType = offersByType;
@@ -110,16 +111,5 @@ export default class EditFormView {
 
   get template() {
     return createEditForm(this.#point, this.#destinations, this.#offersByType);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

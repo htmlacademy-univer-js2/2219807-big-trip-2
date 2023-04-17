@@ -1,5 +1,5 @@
-import {enumerateTypesTrip, humanizeDate, reformatOfferTitles} from '../util';
-import {TRIP_TYPES} from '../const';
+import {enumerateTypesTrip, humanizeDate, reformatOfferTitles} from '../utils/util';
+import {TRIP_TYPES} from '../utils/const';
 import AbstractView from '../framework/view/abstract-view';
 
 const createEditForm = (point, destinations, offersByType) => {

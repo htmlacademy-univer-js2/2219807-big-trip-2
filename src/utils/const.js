@@ -9,14 +9,16 @@ const POINT_DESCRIPTIONS = [
 ];
 
 const COUNTRIES = ['Moscow', 'Ekaterinburg', 'Paris'];
-
 const IMAGE_REFERENCE = 'http://picsum.photos/248/152?r=';
-
 const TRIP_TYPES = ['taxi', 'bus', 'flight'];
-
 const TITLES_OFFER = ['Stay overnight', 'Add lunch', 'Add a place pet'];
-
 const MAX_IMAGE_ID = 1000;
 const MINUTES_GAP = 30;
 
-export {POINT_DESCRIPTIONS, IMAGE_REFERENCE, MAX_IMAGE_ID, COUNTRIES, TRIP_TYPES, MINUTES_GAP, TITLES_OFFER};
+const FILTER_TYPE = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PAST: 'past'
+};
+
+export {POINT_DESCRIPTIONS, IMAGE_REFERENCE, MAX_IMAGE_ID, COUNTRIES, TRIP_TYPES, MINUTES_GAP, TITLES_OFFER, FILTER_TYPE};

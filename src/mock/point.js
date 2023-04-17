@@ -1,6 +1,6 @@
 import {offers} from './offer';
-import {getRandomArrayElement, getRandomBoolean, getRandomDate, getRandomIntegerInterval} from '../util';
-import {MINUTES_GAP, TRIP_TYPES} from '../const';
+import {getRandomArrayElement, getRandomBoolean, getRandomDate, getRandomIntegerInterval} from '../utils/util';
+import {MINUTES_GAP, TRIP_TYPES} from '../utils/const';
 
 let destinationId = 1;
 let pointId = 1;

@@ -1,4 +1,4 @@
-import {getDifferenceTime, humanizeDate} from '../util';
+import {getDifferenceTime, humanizeDate} from '../utils/util';
 import AbstractView from '../framework/view/abstract-view';
 
 

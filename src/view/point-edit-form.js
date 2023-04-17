@@ -1,6 +1,6 @@
-import {createElement} from '../render';
 import {enumerateTypesTrip, humanizeDate, reformatOfferTitles} from '../util';
 import {TRIP_TYPES} from '../const';
+import AbstractView from '../framework/view/abstract-view';
 
 const createEditForm = (point, destinations, offersByType) => {
   const dateFrom = humanizeDate(point.dateFrom, 'DD/MM/YY HH:mm');
@@ -97,12 +97,13 @@ const createEditForm = (point, destinations, offersByType) => {
               </form>`
   );
 };
-export default class EditFormView {
-  #element;
+export default class EditFormView extends AbstractView {
   #point;
   #destinations;
   #offersByType;
+
   constructor(point, destinations, offersByType) {
+    super();
     this.#point = point;
     this.#destinations = destinations;
     this.#offersByType = offersByType;
@@ -112,14 +113,33 @@ export default class EditFormView {
     return createEditForm(this.#point, this.#destinations, this.#offersByType);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.addEventListener('click', this.#clickHandler);
+  };
 
-  removeElement() {
-    this.#element = null;
-  }
+  setSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.addEventListener('submit', this.#submitHandler);
+  };
+
+  setResetHandler = (callback) => {
+    this._callback.formReset = callback;
+    this.element.addEventListener('reset', this.#resetHandler);
+  };
+
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
+
+  #submitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  };
+
+  #resetHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formReset();
+  };
 }

@@ -1,5 +1,5 @@
-import {createElement} from '../render';
 import {getDifferenceTime, humanizeDate} from '../util';
+import AbstractView from '../framework/view/abstract-view';
 
 
 const createPointTemplate = (point, destinations, offersByType) => {
@@ -56,13 +56,14 @@ const createPointTemplate = (point, destinations, offersByType) => {
   );
 };
 
-export default class PointsView {
+export default class PointsView extends AbstractView {
   #element;
-  #point
-  #destinations
-  #offers
+  #point;
+  #destinations;
+  #offers;
 
   constructor(point, destinations, offers) {
+    super();
     this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
@@ -72,14 +73,13 @@ export default class PointsView {
     return createPointTemplate(this.#point, this.#destinations, this.#offers);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.addEventListener('click', this.#clickHandler);
+  };
 
-  removeElement() {
-    this.#element = null;
-  }
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
 }

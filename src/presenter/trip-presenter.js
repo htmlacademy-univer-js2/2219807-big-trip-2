@@ -1,12 +1,11 @@
-import {render, RenderPosition} from '../render';
 import PointsView from '../view/points-view';
 import SortView from '../view/sort';
-import PointNewForm from '../view/point-new-form';
 import EditFormView from '../view/point-edit-form';
 import PointsList from '../view/points-list';
 import FiltersView from '../view/filters';
 import PointModel from '../model/point-model';
 import MessageZeroPoints from '../view/empty-points-list';
+import {render, replace} from '../framework/render';
 
 
 class TripPresenter {
@@ -31,19 +30,18 @@ class TripPresenter {
     this.#boardPoints = [...this.#pointModel.points];
 
     if (this.#boardPoints.length === 0) {
-      render(new MessageZeroPoints(), this.#container, RenderPosition.BEFOREEND);
+      render(new MessageZeroPoints(), this.#container);
       return;
     }
 
-    render(new SortView(), this.#container, RenderPosition.BEFOREEND);
+    render(new SortView(), this.#container);
     render(this.#pointsListComponent, this.#container);
-    render(new PointNewForm(), this.#pointsListComponent.element, RenderPosition.BEFOREEND);
 
     for (const point of this.#boardPoints) {
       this.#renderPoint(point, destinations, offers);
     }
 
-    render(new FiltersView(), this.#filterContainer, RenderPosition.BEFOREEND);
+    render(new FiltersView(), this.#filterContainer);
   }
 
   #renderPoint = (point, destinations, offers) => {
@@ -51,42 +49,37 @@ class TripPresenter {
     const pointEditComponent = new EditFormView(point, destinations, offers);
 
     const turnIntoEdit = () => {
-      this.#pointsListComponent.element.replaceChild(pointEditComponent.element, pointComponent.element);
+      replace(pointEditComponent, pointComponent);
     };
 
     const turnIntoPoint = () => {
-      this.#pointsListComponent.element.replaceChild(pointComponent.element, pointEditComponent.element);
+      replace(pointComponent, pointEditComponent);
     };
 
     const onEscKeyup = (evt) => {
-      if (evt.key === 'Escape') {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
         turnIntoPoint();
         document.removeEventListener('keydown', onEscKeyup);
       }
     };
 
-    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    pointComponent.setClickHandler(() => {
       turnIntoEdit();
-      document.addEventListener('keyup', onEscKeyup);
+      document.addEventListener('keydown', onEscKeyup);
 
-      pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      pointEditComponent.setClickHandler(turnIntoPoint);
+
+      pointEditComponent.setSubmitHandler(() => {
         turnIntoPoint();
+        document.removeEventListener('keydown', onEscKeyup);
       });
 
-      pointEditComponent.element.querySelector('.event__save-btn').addEventListener('submit', (evt) => {
-        evt.preventDefault();
+      pointEditComponent.setResetHandler(() => {
         turnIntoPoint();
-        document.addEventListener('keyup', onEscKeyup);
-      });
-
-      pointEditComponent.element.querySelector('.event--edit').addEventListener('reset', (evt) => {
-        evt.preventDefault();
-        turnIntoPoint();
+        document.removeEventListener('keydown', onEscKeyup);
       });
     });
-
-
     render(pointComponent, this.#pointsListComponent.element);
   };
 }

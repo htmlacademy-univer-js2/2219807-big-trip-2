@@ -39,7 +39,7 @@ const enumerateTypesTrip = (tripType, point) => `
 
 const reformatOfferTitles = (title) => title.split(' ').join('_');
 
-const isTravelDatePassed = (dateFrom) => dateFrom && dayjs().isAfter(dateFrom, 'minute');
+const isTravelDatePassed = (dateTo) => dateTo && dayjs().isAfter(dateTo, 'minute');
 
 export {
   getRandomInteger,

@@ -6,7 +6,7 @@ import FiltersView from '../view/filters';
 import PointModel from '../model/point-model';
 import MessageZeroPoints from '../view/empty-points-list';
 import {render, replace} from '../framework/render';
-
+import {generateFilter} from '../mock/filter';
 
 class TripPresenter {
   #boardPoints;
@@ -24,9 +24,9 @@ class TripPresenter {
   init(filterContainer, pointModel) {
     const destinations = this.#pointModel.destinations;
     const offers = this.#pointModel.offers;
+    const filters = generateFilter(pointModel.points);
     this.#filterContainer = filterContainer;
     this.#pointModel = pointModel;
-
     this.#boardPoints = [...this.#pointModel.points];
 
     if (this.#boardPoints.length === 0) {
@@ -41,7 +41,7 @@ class TripPresenter {
       this.#renderPoint(point, destinations, offers);
     }
 
-    render(new FiltersView(), this.#filterContainer);
+    render(new FiltersView(filters), this.#filterContainer);
   }
 
   #renderPoint = (point, destinations, offers) => {

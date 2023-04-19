@@ -13,14 +13,20 @@ export default class PointPresenter {
     this.#pointsListComponent = pointsListContainer;
   }
 
-  init = (point) => {
+  init = (point, destinations, offers) => {
     this.#point = point;
 
-    this.#pointComponent = new PointsView(point);
-    this.#pointEditComponent = new EditFormView(point);
+    this.#pointComponent = new PointsView(point, destinations, offers);
+    this.#pointEditComponent = new EditFormView(point, destinations, offers);
 
-    this.#pointComponent.setClickHandler(this.#handleEditClick);
-    render(this.#pointComponent, this.#pointsListComponent.element);
+    this.#pointComponent.setClickHandler(this.#handleToEditClick);
+
+    this.#pointEditComponent.setClickHandler(this.#handleToDefaultPoint);
+    this.#pointEditComponent.setResetHandler(this.#handleToDefaultPoint);
+    this.#pointEditComponent.setSubmitHandler(this.#handleToDefaultPoint);
+
+    this.#pointComponent.setClickHandler(this.#handleToEditClick);
+    render(this.#pointComponent, this.#pointsListComponent);
   };
 
 
@@ -34,9 +40,13 @@ export default class PointPresenter {
     document.removeEventListener('keydown', this.#onEscKeyup);
   };
 
-  #handleEditClick = () => {
+  #handleToEditClick = () => {
     this.#turnIntoEdit();
   };
+
+  #handleToDefaultPoint = () => {
+    this.#turnIntoPoint();
+  }
 
   #onEscKeyup = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {

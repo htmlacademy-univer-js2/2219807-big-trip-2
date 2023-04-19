@@ -43,9 +43,9 @@ class TripPresenter {
     render(new FiltersView(filters), this.#filterContainer);
   }
 
-  #renderPoint = (point) => {
+  #renderPoint = (point, offers, destinations) => {
     const pointPresenter = new PointPresenter(this.#pointsListComponent.element);
-    pointPresenter.init(point);
+    pointPresenter.init(point, offers, destinations);
   };
 }
 

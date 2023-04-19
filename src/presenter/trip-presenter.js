@@ -1,12 +1,11 @@
-import PointsView from '../view/points-view';
 import SortView from '../view/sort';
-import EditFormView from '../view/point-edit-form';
 import PointsList from '../view/points-list';
 import FiltersView from '../view/filters';
 import PointModel from '../model/point-model';
 import MessageZeroPoints from '../view/empty-points-list';
-import {render, replace} from '../framework/render';
+import {render} from '../framework/render';
 import {generateFilter} from '../mock/filter';
+import PointPresenter from './point-presenter';
 
 class TripPresenter {
   #boardPoints;
@@ -44,43 +43,9 @@ class TripPresenter {
     render(new FiltersView(filters), this.#filterContainer);
   }
 
-  #renderPoint = (point, destinations, offers) => {
-    const pointComponent = new PointsView(point, destinations, offers);
-    const pointEditComponent = new EditFormView(point, destinations, offers);
-
-    const turnIntoEdit = () => {
-      replace(pointEditComponent, pointComponent);
-    };
-
-    const turnIntoPoint = () => {
-      replace(pointComponent, pointEditComponent);
-    };
-
-    const onEscKeyup = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        turnIntoPoint();
-        document.removeEventListener('keydown', onEscKeyup);
-      }
-    };
-
-    pointComponent.setClickHandler(() => {
-      turnIntoEdit();
-      document.addEventListener('keydown', onEscKeyup);
-
-      pointEditComponent.setClickHandler(turnIntoPoint);
-
-      pointEditComponent.setSubmitHandler(() => {
-        turnIntoPoint();
-        document.removeEventListener('keydown', onEscKeyup);
-      });
-
-      pointEditComponent.setResetHandler(() => {
-        turnIntoPoint();
-        document.removeEventListener('keydown', onEscKeyup);
-      });
-    });
-    render(pointComponent, this.#pointsListComponent.element);
+  #renderPoint = (point) => {
+    const pointPresenter = new PointPresenter(this.#pointsListComponent.element);
+    pointPresenter.init(point);
   };
 }
 

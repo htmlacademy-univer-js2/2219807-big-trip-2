@@ -2,6 +2,7 @@ const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -26,5 +27,9 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       }
     ]
-  }
+  },
+  resolve: {
+    fallback: {
+      path: require.resolve("path-browserify") }
+  },
 };

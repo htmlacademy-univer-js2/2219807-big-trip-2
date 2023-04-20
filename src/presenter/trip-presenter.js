@@ -1,51 +1,48 @@
 import SortView from '../view/sort';
 import PointsList from '../view/points-list';
-import FiltersView from '../view/filters';
-import PointModel from '../model/point-model';
 import MessageZeroPoints from '../view/empty-points-list';
 import {render} from '../framework/render';
-import {generateFilter} from '../mock/filter';
 import PointPresenter from './point-presenter';
 
 class TripPresenter {
   #boardPoints;
-  #pointModel;
-  #filterContainer;
-  #pointsListComponent;
+  #pointsModel;
+  #pointsList;
   #container;
+  #destinations;
+  #offers;
 
-  constructor({container}) {
-    this.#pointsListComponent = new PointsList();
-    this.#container = container;
-    this.#pointModel = new PointModel();
+  constructor(pointContainer) {
+    this.#pointsList = new PointsList();
+    this.#container = pointContainer;
   }
 
-  init(filterContainer, pointModel) {
-    const destinations = this.#pointModel.destinations;
-    const offers = this.#pointModel.offers;
-    const filters = generateFilter(pointModel.points);
-    this.#filterContainer = filterContainer;
-    this.#pointModel = pointModel;
-    this.#boardPoints = [...this.#pointModel.points];
+  init(pointsModel) {
+    this.#pointsModel = pointsModel;
+    this.#boardPoints = [...this.#pointsModel.points];
+    this.#destinations = [...this.#pointsModel.destinations];
+    this.#offers = [...this.#pointsModel.offers];
 
+    this.#renderBoardPoints();
+
+    render(new SortView(), this.#container);
+    render(this.#pointsList, this.#container);
+  }
+
+  #renderPoint = (point, offers, destinations) => {
+    const pointPresenter = new PointPresenter(this.#pointsList.element);
+    pointPresenter.init(point, offers, destinations);
+  };
+
+  #renderBoardPoints = () => {
     if (this.#boardPoints.length === 0) {
       render(new MessageZeroPoints(), this.#container);
       return;
     }
 
-    render(new SortView(), this.#container);
-    render(this.#pointsListComponent, this.#container);
-
     for (const point of this.#boardPoints) {
-      this.#renderPoint(point, destinations, offers);
+      this.#renderPoint(point, this.#destinations, this.#offers);
     }
-
-    render(new FiltersView(filters), this.#filterContainer);
-  }
-
-  #renderPoint = (point, offers, destinations) => {
-    const pointPresenter = new PointPresenter(this.#pointsListComponent.element);
-    pointPresenter.init(point, offers, destinations);
   };
 }
 

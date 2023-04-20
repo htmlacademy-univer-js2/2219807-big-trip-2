@@ -1,6 +1,6 @@
 import PointsView from '../view/points-view';
 import EditFormView from '../view/point-edit-form';
-import {render, replace} from '../framework/render';
+import {remove, render, replace} from '../framework/render';
 
 
 export default class PointPresenter {
@@ -16,17 +16,35 @@ export default class PointPresenter {
   init = (point, destinations, offers) => {
     this.#point = point;
 
+    const recordedPointState = this.#pointComponent;
+    const recordedEditPointState = this.#pointEditComponent;
+
     this.#pointComponent = new PointsView(point, destinations, offers);
     this.#pointEditComponent = new EditFormView(point, destinations, offers);
 
     this.#pointComponent.setClickHandler(this.#handleToEditClick);
+    this.#pointEditComponent.setHandlers(this.#handleToDefaultPoint);
 
-    this.#pointEditComponent.setClickHandler(this.#handleToDefaultPoint);
-    this.#pointEditComponent.setResetHandler(this.#handleToDefaultPoint);
-    this.#pointEditComponent.setSubmitHandler(this.#handleToDefaultPoint);
+    if (recordedPointState === undefined || recordedEditPointState === null) {
+      render(this.#pointComponent, this.#pointsListComponent);
+      return;
+    }
 
-    this.#pointComponent.setClickHandler(this.#handleToEditClick);
-    render(this.#pointComponent, this.#pointsListComponent);
+    if (this.#pointsListComponent.contains(recordedPointState.element)) {
+      replace(this.#pointComponent, recordedEditPointState);
+    }
+
+    if (this.#pointEditComponent.contains(recordedEditPointState.element)) {
+      replace(this.#pointEditComponent, recordedEditPointState);
+    }
+
+    remove(recordedPointState);
+    remove(recordedEditPointState);
+  };
+
+  destroy = () => {
+    remove(this.#pointComponent);
+    remove(this.#pointEditComponent);
   };
 
 

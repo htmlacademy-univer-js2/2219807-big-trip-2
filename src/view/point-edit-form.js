@@ -113,33 +113,16 @@ export default class EditFormView extends AbstractView {
     return createEditForm(this.#point, this.#destinations, this.#offersByType);
   }
 
-  setClickHandler = (callback) => {
+  setHandlers = (callback) => {
     this._callback.click = callback;
     this.element.addEventListener('click', this.#clickHandler);
+    this.element.addEventListener('submit', this.#clickHandler);
+    this.element.addEventListener('reset', this.#clickHandler);
   };
 
-  setSubmitHandler = (callback) => {
-    this._callback.formSubmit = callback;
-    this.element.addEventListener('submit', this.#submitHandler);
-  };
-
-  setResetHandler = (callback) => {
-    this._callback.formReset = callback;
-    this.element.addEventListener('reset', this.#resetHandler);
-  };
-
+  // Пока что кнопка клика, работает точно также, как и подтверждения и сброса, реализация будет такая для сокращения кода
   #clickHandler = (evt) => {
     evt.preventDefault();
     this._callback.click();
-  };
-
-  #submitHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.formSubmit();
-  };
-
-  #resetHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.formReset();
   };
 }

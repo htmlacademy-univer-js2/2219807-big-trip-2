@@ -1,32 +1,31 @@
 import SortView from '../view/sort';
 import PointsList from '../view/points-list';
 import MessageZeroPoints from '../view/empty-points-list';
-import {render} from '../framework/render';
+import {render, RenderPosition} from '../framework/render';
 import PointPresenter from './point-presenter';
 
 class TripPresenter {
   #boardPoints;
   #pointsModel;
-  #pointsList;
-  #container;
+  #pointsList = new PointsList();
+  #pointListContainer;
   #destinations;
   #offers;
 
-  constructor(pointContainer) {
-    this.#pointsList = new PointsList();
-    this.#container = pointContainer;
+  constructor(pointListContainer, pointsModel) {
+    this.#pointListContainer = pointListContainer;
+    this.#pointsModel = pointsModel;
   }
 
-  init(pointsModel) {
-    this.#pointsModel = pointsModel;
+  init() {
     this.#boardPoints = [...this.#pointsModel.points];
     this.#destinations = [...this.#pointsModel.destinations];
     this.#offers = [...this.#pointsModel.offers];
 
     this.#renderBoardPoints();
 
-    render(new SortView(), this.#container);
-    render(this.#pointsList, this.#container);
+    render(new SortView(), this.#pointListContainer, RenderPosition.AFTERBEGIN);
+    render(this.#pointsList, this.#pointListContainer);
   }
 
   #renderPoint = (point, offers, destinations) => {
@@ -36,7 +35,7 @@ class TripPresenter {
 
   #renderBoardPoints = () => {
     if (this.#boardPoints.length === 0) {
-      render(new MessageZeroPoints(), this.#container);
+      render(new MessageZeroPoints(), this.#pointListContainer);
       return;
     }
 

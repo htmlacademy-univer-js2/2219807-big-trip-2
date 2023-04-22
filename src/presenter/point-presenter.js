@@ -4,42 +4,48 @@ import {remove, render, replace} from '../framework/render';
 
 
 export default class PointPresenter {
-  #pointsListComponent;
+  #pointsListContainer;
+
+  #pointComponent = null;
+  #pointEditComponent = null;
+
   #point;
-  #pointComponent;
-  #pointEditComponent;
+  #destinations;
+  #offers;
 
   constructor(pointsListContainer) {
-    this.#pointsListComponent = pointsListContainer;
+    this.#pointsListContainer = pointsListContainer;
   }
 
   init = (point, destinations, offers) => {
     this.#point = point;
+    this.#destinations = destinations;
+    this.#offers = offers;
 
-    const recordedPointState = this.#pointComponent;
-    const recordedEditPointState = this.#pointEditComponent;
+    const previousPointComponent = this.#pointComponent;
+    const previousEditPointComponent = this.#pointEditComponent;
 
-    this.#pointComponent = new PointsView(point, destinations, offers);
-    this.#pointEditComponent = new EditFormView(point, destinations, offers);
+    this.#pointComponent = new PointsView(this.#point, this.#destinations, this.#offers, this.#handleToEditClick);
+    this.#pointEditComponent = new EditFormView(this.#point, this.#destinations, this.#offers, this.#handleToDefaultPoint);
 
-    this.#pointComponent.setClickHandler(this.#handleToEditClick);
-    this.#pointEditComponent.setHandlers(this.#handleToDefaultPoint);
+    this.#pointComponent.setClickHandler(this.#turnIntoEdit);
+    this.#pointEditComponent.setHandlers(this.#turnIntoPoint);
 
-    if (recordedPointState === undefined || recordedEditPointState === null) {
-      render(this.#pointComponent, this.#pointsListComponent);
+    if (previousPointComponent === null || previousEditPointComponent === null) {
+      render(this.#pointComponent, this.#pointsListContainer);
       return;
     }
 
-    if (this.#pointsListComponent.contains(recordedPointState.element)) {
-      replace(this.#pointComponent, recordedEditPointState);
+    if (this.#pointsListContainer.contains(previousPointComponent.element)) {
+      replace(this.#pointComponent, previousPointComponent);
     }
 
-    if (this.#pointEditComponent.contains(recordedEditPointState.element)) {
-      replace(this.#pointEditComponent, recordedEditPointState);
+    if (this.#pointsListContainer.contains(previousEditPointComponent.element)) {
+      replace(this.#pointEditComponent, previousEditPointComponent);
     }
 
-    remove(recordedPointState);
-    remove(recordedEditPointState);
+    remove(previousPointComponent);
+    remove(previousEditPointComponent);
   };
 
   destroy = () => {
@@ -64,7 +70,7 @@ export default class PointPresenter {
 
   #handleToDefaultPoint = () => {
     this.#turnIntoPoint();
-  }
+  };
 
   #onEscKeyup = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {

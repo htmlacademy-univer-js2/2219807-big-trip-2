@@ -60,12 +60,14 @@ export default class PointsView extends AbstractView {
   #point;
   #destinations;
   #offers;
+  #handleClick
 
-  constructor(point, destinations, offers) {
+  constructor(point, destinations, offers, handleClick) {
     super();
     this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
+    this.#handleClick = handleClick;
   }
 
   get template() {

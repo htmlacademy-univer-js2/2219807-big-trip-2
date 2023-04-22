@@ -3,6 +3,7 @@ import PointsList from '../view/points-list';
 import MessageZeroPoints from '../view/empty-points-list';
 import {render, RenderPosition} from '../framework/render';
 import PointPresenter from './point-presenter';
+import {updatePoint} from '../utils/util';
 
 class TripPresenter {
   #boardPoints;
@@ -11,6 +12,7 @@ class TripPresenter {
   #pointListContainer;
   #destinations;
   #offers;
+  #pointPresenter = new Map();
 
   constructor(pointListContainer, pointsModel) {
     this.#pointListContainer = pointListContainer;
@@ -29,8 +31,19 @@ class TripPresenter {
   }
 
   #renderPoint = (point, offers, destinations) => {
-    const pointPresenter = new PointPresenter(this.#pointsList.element);
+    const pointPresenter = new PointPresenter(this.#pointsList.element, this.#handlePointChange, this.#handleModeChange);
     pointPresenter.init(point, offers, destinations);
+    this.#pointPresenter.set(point.id, pointPresenter);
+  };
+
+  #clearPointsList = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.destroy());
+    this.#pointPresenter.clear();
+  };
+
+  #handlePointChange = (updatedPoint, offers, destinations) => {
+    this.#pointsList = updatePoint(this.#boardPoints, updatedPoint);
+    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint, offers, destinations);
   };
 
   #renderBoardPoints = () => {
@@ -42,6 +55,10 @@ class TripPresenter {
     for (const point of this.#boardPoints) {
       this.#renderPoint(point, this.#destinations, this.#offers);
     }
+  };
+
+  #handleModeChange = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.resetView(presenter));
   };
 }
 

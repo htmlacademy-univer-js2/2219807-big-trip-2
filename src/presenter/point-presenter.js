@@ -17,7 +17,7 @@ export default class PointPresenter {
 
   #changeMode;
   #isEditing = false; // Можно было бы реализовать и через объект и рассматривать несколько состояний,
-                      // но я пока что решил, что не стоит, в будущем можно будет переделать
+  // но я пока что решил, что не стоит, в будущем можно будет переделать
 
   constructor(pointsListContainer, changeDataPoint, changeMode) {
     this.#pointsListContainer = pointsListContainer;

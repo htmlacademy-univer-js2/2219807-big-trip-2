@@ -115,7 +115,7 @@ export default class EditFormView extends AbstractView {
 
     this.#handleToPointClick = handleToPointClick;
     this.#handleSubmit = handleSubmit;
-    this.#handleReset = handleReset
+    this.#handleReset = handleReset;
 
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
     this.element.addEventListener('submit', this.#handleSubmit);

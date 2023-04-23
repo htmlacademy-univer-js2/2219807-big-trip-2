@@ -43,6 +43,34 @@ const isTravelDatePassed = (dateTo) => dateTo && dayjs().isAfter(dateTo, 'minute
 
 const updatePoint = (points, update) => points.map((item) => item.id === update.id ? update : item);
 
+const getWeightForNullDate = (dateA, dateB) => {
+  if (dateA === null && dateB === null) {
+    return 0;
+  }
+
+  if (dateA === null) {
+    return 1;
+  }
+
+  if (dateB === null) {
+    return -1;
+  }
+
+  return null;
+};
+
+const sortPointUp = (taskA, taskB) => {
+  const weight = getWeightForNullDate(taskA.dateFrom, taskB.dateFrom);
+
+  return weight ?? dayjs(taskA.dateFrom).diff(dayjs(taskB.dateFrom));
+};
+
+const sortPointDown = (taskA, taskB) => {
+  const weight = getWeightForNullDate(taskA.dateFrom, taskB.dateFrom);
+
+  return weight ?? dayjs(taskB.dateFrom).diff(dayjs(taskA.dateFrom));
+};
+
 
 export {
   getRandomInteger,
@@ -55,5 +83,8 @@ export {
   enumerateTypesTrip,
   reformatOfferTitles,
   isTravelDatePassed,
-  updatePoint
+  updatePoint,
+  getWeightForNullDate,
+  sortPointUp,
+  sortPointDown
 };

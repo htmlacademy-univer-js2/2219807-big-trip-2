@@ -1,6 +1,6 @@
-import SortView from '../view/sort';
+import SortView from '../view/sort-view';
 import PointsList from '../view/points-list';
-import MessageZeroPoints from '../view/empty-points-list';
+import MessageZeroPoints from '../view/empty-points-list-view';
 import {render, RenderPosition} from '../framework/render';
 import PointPresenter from './point-presenter';
 import {updatePoint} from '../utils/util';

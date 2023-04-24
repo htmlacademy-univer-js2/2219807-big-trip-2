@@ -42,23 +42,6 @@ const reformatOfferTitles = (title) => title.split(' ').join('_');
 const isTravelDatePassed = (dateTo) => dateTo && dayjs().isAfter(dateTo, 'minute');
 
 const updatePoint = (points, update) => points.map((item) => item.id === update.id ? update : item);
-
-const getWeightForNullDate = (dateA, dateB) => {
-  if (dateA === null && dateB === null) {
-    return 0;
-  }
-
-  if (dateA === null) {
-    return 1;
-  }
-
-  if (dateB === null) {
-    return -1;
-  }
-
-  return null;
-};
-
 const sortDateUp = (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
 const sortPriceUp = (priceA, priceB) => priceA.basePrice - priceB.basePrice;
 export {
@@ -73,7 +56,6 @@ export {
   reformatOfferTitles,
   isTravelDatePassed,
   updatePoint,
-  getWeightForNullDate,
   sortDateUp,
   sortPriceUp
 };

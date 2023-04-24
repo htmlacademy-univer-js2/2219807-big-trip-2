@@ -3,7 +3,7 @@ import PointsList from '../view/points-list';
 import MessageZeroPoints from '../view/empty-points-list-view';
 import {render, RenderPosition} from '../framework/render';
 import PointPresenter from './point-presenter';
-import {updatePoint, sortPointDown, sortPointUp} from '../utils/util';
+import {updatePoint, sortPriceUp, sortDateUp} from '../utils/util';
 import {SORT_FIELDS} from '../utils/const';
 
 class TripPresenter {
@@ -16,6 +16,7 @@ class TripPresenter {
   #pointPresenter = new Map();
   #currentSortType = SORT_FIELDS.DAY;
   #sourcedBoardPoints = [];
+  #sortComponent = new SortView();
 
   constructor(pointListContainer, pointsModel) {
     this.#pointListContainer = pointListContainer;
@@ -30,7 +31,9 @@ class TripPresenter {
 
     this.#renderBoardPoints();
 
-    render(new SortView(this.#handleSortTypeChange), this.#pointListContainer, RenderPosition.AFTERBEGIN);
+    this.#sortComponent.setSortTypeHandler(this.#handleSortTypeChange);
+
+    render(this.#sortComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
     render(this.#pointsList, this.#pointListContainer);
   }
 
@@ -52,29 +55,32 @@ class TripPresenter {
   };
 
   #handleSortTypeChange = (sortType) => {
-    if (this.#currentSortType === sortType){
+    if (this.#currentSortType === sortType) {
       return;
     }
 
-    this.#sortPoints();
+    this.#sortPoints(sortType);
     this.#clearPointsList();
     this.#renderBoardPoints();
-  }
+  };
 
   #sortPoints = (sortType) => {
     switch (sortType) {
       case SORT_FIELDS.DAY:
-        this.#boardPoints.sort(sortPointDown);
+        this.#boardPoints.sort(sortDateUp);
         break;
       case SORT_FIELDS.TIME:
-        this.#boardPoints.sort(sortPointUp);
+        this.#boardPoints.sort(sortDateUp);
+        break;
+      case SORT_FIELDS.PRICE:
+        this.#boardPoints.sort(sortPriceUp);
         break;
       default:
         this.#boardPoints = [...this.#sourcedBoardPoints];
     }
 
     this.#currentSortType = sortType;
-  }
+  };
 
   #renderBoardPoints = () => {
     if (this.#boardPoints.length === 0) {

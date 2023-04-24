@@ -59,19 +59,8 @@ const getWeightForNullDate = (dateA, dateB) => {
   return null;
 };
 
-const sortPointUp = (taskA, taskB) => {
-  const weight = getWeightForNullDate(taskA.dateFrom, taskB.dateFrom);
-
-  return weight ?? dayjs(taskA.dateFrom).diff(dayjs(taskB.dateFrom));
-};
-
-const sortPointDown = (taskA, taskB) => {
-  const weight = getWeightForNullDate(taskA.dateFrom, taskB.dateFrom);
-
-  return weight ?? dayjs(taskB.dateFrom).diff(dayjs(taskA.dateFrom));
-};
-
-
+const sortDateUp = (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
+const sortPriceUp = (priceA, priceB) => priceA.basePrice - priceB.basePrice;
 export {
   getRandomInteger,
   humanizeDate,
@@ -85,6 +74,6 @@ export {
   isTravelDatePassed,
   updatePoint,
   getWeightForNullDate,
-  sortPointUp,
-  sortPointDown
+  sortDateUp,
+  sortPriceUp
 };

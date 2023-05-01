@@ -1,5 +1,5 @@
-import {enumerateTypesTrip, humanizeDate, reformatOfferTitles} from '../util';
-import {TRIP_TYPES} from '../const';
+import {enumerateTypesTrip, humanizeDate, reformatOfferTitles} from '../utils/util';
+import {TRIP_TYPES} from '../utils/const';
 import AbstractView from '../framework/view/abstract-view';
 
 const createEditForm = (point, destinations, offersByType) => {
@@ -100,46 +100,39 @@ const createEditForm = (point, destinations, offersByType) => {
 export default class EditFormView extends AbstractView {
   #point;
   #destinations;
-  #offersByType;
+  #offers;
 
-  constructor(point, destinations, offersByType) {
+  #handleToPointClick;
+  #handleSubmit;
+  #handleReset;
+
+  constructor(point, destinations, offers, handleToPointClick, handleSubmit, handleReset) {
     super();
     this.#point = point;
     this.#destinations = destinations;
-    this.#offersByType = offersByType;
+    this.#offers = offers;
+
+
+    this.#handleToPointClick = handleToPointClick;
+    this.#handleSubmit = handleSubmit;
+    this.#handleReset = handleReset;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
+    this.element.addEventListener('submit', this.#handleSubmit);
+    this.element.addEventListener('reset', this.#handleReset);
   }
 
   get template() {
-    return createEditForm(this.#point, this.#destinations, this.#offersByType);
+    return createEditForm(this.#point, this.#destinations, this.#offers);
   }
-
-  setClickHandler = (callback) => {
-    this._callback.click = callback;
-    this.element.addEventListener('click', this.#clickHandler);
-  };
-
-  setSubmitHandler = (callback) => {
-    this._callback.formSubmit = callback;
-    this.element.addEventListener('submit', this.#submitHandler);
-  };
-
-  setResetHandler = (callback) => {
-    this._callback.formReset = callback;
-    this.element.addEventListener('reset', this.#resetHandler);
-  };
 
   #clickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.click();
+    this.#handleToPointClick();
   };
 
   #submitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit();
-  };
-
-  #resetHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.formReset();
+    this.#handleSubmit();
   };
 }

@@ -41,6 +41,7 @@
     "copy-webpack-plugin": "11.0.0",
     "dayjs": "1.10.7",
     "flatpickr": "4.6.9",
-    "he": "1.2.0"
+    "he": "1.2.0",
+    "path-browserify": "^1.0.1"
   }
 }

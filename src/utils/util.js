@@ -39,6 +39,11 @@ const enumerateTypesTrip = (tripType, point) => `
 
 const reformatOfferTitles = (title) => title.split(' ').join('_');
 
+const isTravelDatePassed = (dateTo) => dateTo && dayjs().isAfter(dateTo, 'minute');
+
+const updatePoint = (points, update) => points.map((item) => item.id === update.id ? update : item);
+
+
 export {
   getRandomInteger,
   humanizeDate,
@@ -48,5 +53,7 @@ export {
   getRandomIntegerInterval,
   getDifferenceTime,
   enumerateTypesTrip,
-  reformatOfferTitles
+  reformatOfferTitles,
+  isTravelDatePassed,
+  updatePoint
 };

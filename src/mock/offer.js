@@ -1,5 +1,5 @@
-import {getRandomArrayElement, getRandomInteger} from '../util';
-import {TITLES_OFFER} from '../const';
+import {getRandomArrayElement, getRandomInteger} from '../utils/util';
+import {TITLES_OFFER} from '../utils/const';
 
 export const generateOffers = (id) => ({
   id: id,

@@ -8,7 +8,7 @@ let pointId = 1;
 
 const generatePoints = () => ({
   basePrice: getRandomIntegerInterval(10, 300),
-  dateFrom: getRandomDate(MINUTES_GAP),
+  dateFrom: getRandomDate(-MINUTES_GAP),
   dateTo: getRandomDate(MINUTES_GAP),
   destination: destinationId++,
   id: pointId++,

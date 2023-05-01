@@ -50,7 +50,7 @@ class TripPresenter {
 
   #handlePointChange = (updatedPoint, offers, destinations) => {
     this.#pointsList = updatePoint(this.#boardPoints, updatedPoint);
-    this.#sourcedBoardPoints = updatedPoint(this.#boardPoints, updatedPoint);
+    this.#sourcedBoardPoints = updatePoint(this.#boardPoints, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint, offers, destinations);
   };
 
@@ -66,9 +66,6 @@ class TripPresenter {
 
   #sortPoints = (sortType) => {
     switch (sortType) {
-      case SORT_FIELDS.DAY:
-        this.#boardPoints.sort(sortDateUp);
-        break;
       case SORT_FIELDS.TIME:
         this.#boardPoints.sort(sortDateUp);
         break;

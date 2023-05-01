@@ -72,10 +72,10 @@ export default class PointPresenter {
   };
 
   resetView = () => {
-    if (this.#isEditing){
+    if (this.#isEditing) {
       this.#turnIntoPoint();
     }
-  }
+  };
 
   #turnIntoEdit = () => {
     replace(this.#pointEditComponent, this.#pointComponent);

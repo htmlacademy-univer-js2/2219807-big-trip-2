@@ -42,8 +42,8 @@ const reformatOfferTitles = (title) => title.split(' ').join('_');
 const isTravelDatePassed = (dateTo) => dateTo && dayjs().isAfter(dateTo, 'minute');
 
 const updatePoint = (points, update) => points.map((item) => item.id === update.id ? update : item);
-
-
+const sortDateUp = (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
+const sortPriceUp = (priceA, priceB) => priceA.basePrice - priceB.basePrice;
 export {
   getRandomInteger,
   humanizeDate,
@@ -55,5 +55,7 @@ export {
   enumerateTypesTrip,
   reformatOfferTitles,
   isTravelDatePassed,
-  updatePoint
+  updatePoint,
+  sortDateUp,
+  sortPriceUp
 };

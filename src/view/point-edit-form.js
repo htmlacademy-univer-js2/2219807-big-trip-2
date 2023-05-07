@@ -16,7 +16,6 @@ const createEditForm = (state) => (`
                       <fieldset class="event__type-group">
                         <legend class="visually-hidden">Event type</legend>
                         ${TRIP_TYPES.map((type) => enumerateTypesTrip(type, state)).join('')}
-
                       </fieldset>
                     </div>
                   </div>
@@ -141,10 +140,18 @@ export default class EditFormView extends AbstractStatefulView {
     offers: offers
   });
 
-  static parseStateToFormView = (state) => ({
-    ...state,
-    destination: state.destinations.id,
-    offers: state.offers.filter((offer) => offer === state.point.id)
-  });
+  static parseStateToFormView = (state) => {
+    const point = {...state};
+
+    delete point.pointTypeOffers;
+    delete point.pointOffers;
+    delete point.pointDestination;
+
+    return {
+      ...state,
+      destination: state.destinations.id,
+      offers: state.offers.filter((offer) => offer === state.point.id)
+    };
+  };
 }
 

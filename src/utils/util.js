@@ -35,11 +35,11 @@ const getDifferenceTime = (dateFrom, dateTo) => {
 const upFirstChar = (line) => line !== '' ? line[0].toUpperCase() + line.slice(1) : '';
 
 
-const enumerateTypesTrip = (tripType, point) => `
+const enumerateTypesTrip = (tripType, point) => (`
         <div class="event__type-item">
-            <input id="event-type-${tripType}-${point.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${tripType}">
-            <label class="event__type-label  event__type-label--${tripType}" for="event-type-${tripType}-${point.id}}">$${upFirstChar(tripType)}</label>
-        </div>`;
+            <input id="event-type-${tripType}-${point.point.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${tripType}">
+            <label class="event__type-label  event__type-label--${tripType}" for="event-type-${tripType}-${point.point.id}}">${upFirstChar(tripType)}</label>
+        </div>`);
 
 const reformatOfferTitles = (title) => title.split(' ').join('_');
 

@@ -1,6 +1,12 @@
-import {enumerateTypesTrip, humanizeDate, reformatOfferTitles} from '../utils/util';
+import {
+  enumerateTypesTrip,
+  getRandomIntegerInterval,
+  humanizeDate,
+  reformatOfferTitles
+} from '../utils/util';
 import {TRIP_TYPES} from '../utils/const';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+import {getRandomDescription} from '../mock/destinations';
 
 
 const createEditForm = (state) => (`
@@ -21,7 +27,7 @@ const createEditForm = (state) => (`
                   </div>
 
                   <div class="event__field-group  event__field-group--destination">
-                    <label class="event__label  event__type-output" for="event-destination-1">
+                    <label class="event__label  event__type-output" for="event-destination-${state.point.id}">
                       ${state.point.type}
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-${state.point.id}" type="text" name="event-destination" value=${state.point.pointDestination.name} list="destination-list-${state.point.id}">
@@ -102,6 +108,11 @@ export default class EditFormView extends AbstractStatefulView {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
     this.setFormSubmitHandler(EditFormView.parseStateToFormView);
     this.element.addEventListener('reset', this.#handleReset);
+    this.element.querySelector('.event__type-group').addEventListener('click', this.#changeTripType);
+
+    if (this.element.querySelector('#event-destination-1')) {
+      this.element.querySelector('#event-destination-1').addEventListener('change', this.#showNewDescriptionAndPhotos);
+    }
   }
 
   get template() {
@@ -123,6 +134,32 @@ export default class EditFormView extends AbstractStatefulView {
     this._callback.formSubmit(EditFormView.parseStateToFormView(this._state));
   };
 
+  #changeTripType = (evt) => {
+    evt.preventDefault();
+
+    this._setState({
+      type: evt.target.value,
+      pointOffers: this._state.offers.filter((offer) => this._state.point.offers.includes(offer.id)),
+      isChecked: !this._state.offers.isChecked
+    });
+  };
+
+  #showNewDescriptionAndPhotos = (evt) => {
+    evt.preventDefault();
+
+    this.updateElement({
+      destinations: {
+        ...this._state.destinations,
+        description: getRandomDescription(),
+        name: evt.target.value,
+        pictures: {
+          src: `https://picsum.photos/248/152?r=${getRandomIntegerInterval(1, 1000)}`,
+          description: getRandomDescription()
+        }
+      }
+    });
+  };
+
   _restoreHandlers() {
     return undefined;
   }
@@ -135,6 +172,7 @@ export default class EditFormView extends AbstractStatefulView {
       pointTypeOffers: offers.find((offer) => offer.type === point.type).offers,
       pointOffers: offers.filter((offer) => point.offers.includes(offer.id)),
       pointDestination: destinations.find((destination) => destination.id === point.destination),
+      isChecked: false
     },
     destinations: destinations,
     offers: offers

@@ -37,8 +37,8 @@ const upFirstChar = (line) => line !== '' ? line[0].toUpperCase() + line.slice(1
 
 const enumerateTypesTrip = (tripType, state) => (`
         <div class="event__type-item">
-            <input id="event-type-${tripType}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${tripType}" ${state.point.isChecked ? 'checked' : ''}>
-            <label class="event__type-label  event__type-label--${tripType}" for="event-type-${tripType}-${state.point.id}}">${upFirstChar(tripType)}</label>
+            <input id="event-type-${tripType}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${tripType}" ${state.isChecked ? 'checked' : ''}>
+            <label class="event__type-label  event__type-label--${tripType}" for="event-type-${tripType}-${state.id}}">${upFirstChar(tripType)}</label>
         </div>`);
 
 const reformatOfferTitles = (title) => title.split(' ').join('_');

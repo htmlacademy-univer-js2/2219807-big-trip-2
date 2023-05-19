@@ -6,10 +6,10 @@ const createPointTemplate = (point, destinations, offers) => {
 
   const {basePrice, dateFrom, dateTo, isFavorite, type} = point;
   const isFavoriteButtonClass = isFavorite ? 'event__favorite-btn--active' : '';
-  const humanizedDateFrom = dateFrom !== null ? humanizeDate(dateFrom, 'HH mm') : '';
-  const humanizedDateTo = dateTo !== null ? humanizeDate(dateTo, 'HH mm') : '';
+  const humanizedDateFrom = dateFrom !== null ? humanizeDate(dateFrom, 'HH:mm') : '';
+  const humanizedDateTo = dateTo !== null ? humanizeDate(dateTo, 'HH:mm') : '';
   const differenceTime = getDifferenceTime(dateFrom, dateTo);
-  const dateMonthDay = dateFrom !== null ? humanizeDate(dateFrom, 'MMM d') : '';
+  const dateMonthDay = dateFrom !== null ? humanizeDate(dateFrom, 'MMM DD') : '';
   const pointDestination = destinations.find((destination) => destination.id === point.destination);
   const pointTypeOffers = offers.find((offer) => offer.type === point.type).offers;
   const pointOffers = pointTypeOffers.filter((offer) => point.offers.includes(offer.id));
@@ -41,7 +41,6 @@ const createPointTemplate = (point, destinations, offers) => {
                    &plus;&euro;&nbsp;
                     <span class="event__offer-price">${offer.price}</span>
                   </li>`)).join('')}
-
                 </ul>
                 <button class="event__favorite-btn ${isFavoriteButtonClass}" type="button">
                   <span class="visually-hidden">Add to favorite</span>

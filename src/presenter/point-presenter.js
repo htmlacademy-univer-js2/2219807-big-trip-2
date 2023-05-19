@@ -56,9 +56,7 @@ export default class PointPresenter {
 
     if (this.#isEditing === false) {
       replace(this.#pointComponent, previousPointComponent);
-    }
-
-    if (this.#isEditing === true) {
+    } else {
       replace(this.#pointEditComponent, previousEditPointComponent);
     }
 
@@ -77,6 +75,10 @@ export default class PointPresenter {
     }
   };
 
+  #handleToEditClick = () => {
+    this.#turnIntoEdit();
+  };
+
   #turnIntoEdit = () => {
     replace(this.#pointEditComponent, this.#pointComponent);
     document.addEventListener('keydown', this.#onEscKeyup);
@@ -84,22 +86,18 @@ export default class PointPresenter {
     this.#isEditing = true;
   };
 
-  #turnIntoPoint = () => {
-    replace(this.#pointComponent, this.#pointEditComponent);
-    document.removeEventListener('keydown', this.#onEscKeyup);
-    this.#isEditing = false;
-  };
-
   #handleFavoritePoint = () => {
     this.#handlePointChange(this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
   };
 
-  #handleToEditClick = () => {
-    this.#turnIntoEdit();
-  };
-
   #handleToDefaultPoint = () => {
     this.#turnIntoPoint();
+  };
+
+  #turnIntoPoint = () => {
+    replace(this.#pointComponent, this.#pointEditComponent);
+    document.removeEventListener('keydown', this.#onEscKeyup);
+    this.#isEditing = false;
   };
 
   #onEscKeyup = (evt) => {
@@ -109,4 +107,3 @@ export default class PointPresenter {
     }
   };
 }
-

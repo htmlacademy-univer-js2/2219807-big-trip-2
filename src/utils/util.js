@@ -20,22 +20,26 @@ const getDifferenceTime = (dateFrom, dateTo) => {
   let differenceMinutes = dayjs(dateTo).format('mm') - dayjs(dateFrom).format('mm');
   let differenceHours = dayjs(dateTo).format('HH') - dayjs(dateFrom).format('HH');
 
+
   if (differenceMinutes < 0) {
     differenceHours--;
     differenceMinutes += 60;
   }
 
-  return `${differenceHours} HOURS - ${differenceMinutes} MINUTES`;
+  if (differenceHours !== 0) {
+    return `${differenceHours} H ${differenceMinutes} M`;
+  }
+  return `${differenceMinutes} M`;
 };
 
 const upFirstChar = (line) => line !== '' ? line[0].toUpperCase() + line.slice(1) : '';
 
 
-const enumerateTypesTrip = (tripType, point) => `
+const enumerateTypesTrip = (tripType, state) => (`
         <div class="event__type-item">
-            <input id="event-type-${tripType}-${point.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${tripType}">
-            <label class="event__type-label  event__type-label--${tripType}" for="event-type-${tripType}-${point.id}}">$${upFirstChar(tripType)}</label>
-        </div>`;
+            <input id="event-type-${tripType}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${tripType}" ${state.isChecked ? 'checked' : ''}>
+            <label class="event__type-label  event__type-label--${tripType}" for="event-type-${tripType}-${state.id}}">${upFirstChar(tripType)}</label>
+        </div>`);
 
 const reformatOfferTitles = (title) => title.split(' ').join('_');
 
@@ -44,6 +48,7 @@ const isTravelDatePassed = (dateTo) => dateTo && dayjs().isAfter(dateTo, 'minute
 const updatePoint = (points, update) => points.map((item) => item.id === update.id ? update : item);
 const sortDateUp = (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
 const sortPriceUp = (priceA, priceB) => priceA.basePrice - priceB.basePrice;
+
 export {
   getRandomInteger,
   humanizeDate,

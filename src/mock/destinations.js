@@ -2,7 +2,7 @@ import {COUNTRIES, IMAGE_REFERENCE, MAX_IMAGE_ID, POINT_DESCRIPTIONS} from '../u
 import {getRandomInteger} from '../utils/util';
 
 const getRandomDescription = () => POINT_DESCRIPTIONS[getRandomInteger(POINT_DESCRIPTIONS.length - 1)];
-const getRandomCountry = () => COUNTRIES[getRandomInteger(COUNTRIES.length - 1)];
+const getRandomCountry = () => COUNTRIES[getRandomInteger(COUNTRIES.length)];
 const getRandomPicture = () => `${IMAGE_REFERENCE}${getRandomInteger(MAX_IMAGE_ID)}`;
 const getPicturesDestination = () => (
   [
@@ -24,4 +24,6 @@ const generateDestination = (id) => ({
   pictures: getPicturesDestination()
 });
 
-export const destinations = [generateDestination(1), generateDestination(2), generateDestination(3)];
+const destinations = [generateDestination(1), generateDestination(2), generateDestination(3)];
+
+export {destinations, getRandomDescription, getRandomPicture};

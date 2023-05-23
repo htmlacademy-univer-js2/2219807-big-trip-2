@@ -1,8 +1,9 @@
 import {generatePoints} from '../mock/point';
 import {destinations} from '../mock/destinations';
 import {offers} from '../mock/offer';
+import Observable from '../framework/observable';
 
-export default class PointModel {
+export default class PointModel extends Observable {
   #points;
   #destinations;
   #offers

@@ -7,7 +7,6 @@ import {updatePoint, sortPriceUp, sortDateUp} from '../utils/util';
 import {SORT_FIELDS} from '../utils/const';
 
 class TripPresenter {
-  #boardPoints;
   #pointsModel;
   #pointsList = new PointsList();
   #pointListContainer;
@@ -15,7 +14,6 @@ class TripPresenter {
   #offers;
   #pointPresenter = new Map();
   #currentSortType = SORT_FIELDS.DAY;
-  #sourcedBoardPoints = [];
   #sortComponent = new SortView();
 
   constructor(pointListContainer, pointsModel) {
@@ -28,8 +26,6 @@ class TripPresenter {
   }
 
   init() {
-    this.#boardPoints = [...this.#pointsModel.points];
-    this.#sourcedBoardPoints = [...this.#pointsModel.points];
     this.#destinations = [...this.#pointsModel.destinations];
     this.#offers = [...this.#pointsModel.offers];
 
@@ -53,8 +49,8 @@ class TripPresenter {
   };
 
   #handlePointChange = (updatedPoint, offers, destinations) => {
-    this.#pointsList = updatePoint(this.#boardPoints, updatedPoint);
-    this.#sourcedBoardPoints = updatePoint(this.#boardPoints, updatedPoint);
+    this.#pointsList = updatePoint(this.#pointsModel.points, updatedPoint);
+    this.#pointsModel.points = updatedPoint(this.#pointsModel.points, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint, offers, destinations);
   };
 
@@ -71,25 +67,25 @@ class TripPresenter {
   #sortPoints = (sortType) => {
     switch (sortType) {
       case SORT_FIELDS.TIME:
-        this.#boardPoints.sort(sortDateUp);
+        this.#pointsModel.points.sort(sortDateUp);
         break;
       case SORT_FIELDS.PRICE:
-        this.#boardPoints.sort(sortPriceUp);
+        this.#pointsModel.points.sort(sortPriceUp);
         break;
       default:
-        this.#boardPoints = [...this.#sourcedBoardPoints];
+        return this.#pointsModel.points;
     }
 
     this.#currentSortType = sortType;
   };
 
   #renderBoardPoints = () => {
-    if (this.#boardPoints.length === 0) {
+    if (this.#pointsModel.points.length === 0) {
       render(new MessageZeroPoints(), this.#pointListContainer);
       return;
     }
 
-    for (const point of this.#boardPoints) {
+    for (const point of this.#pointsModel.points) {
       this.#renderPoint(point, this.#destinations, this.#offers);
     }
   };

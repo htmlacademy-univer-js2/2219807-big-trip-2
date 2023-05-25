@@ -1,6 +1,7 @@
 import PointsView from '../view/points-view';
 import EditFormView from '../view/point-edit-form';
 import {remove, render, replace} from '../framework/render';
+import {UPDATE_TYPES, USER_ACTIONS} from '../utils/const';
 
 
 export default class PointPresenter {
@@ -45,9 +46,9 @@ export default class PointPresenter {
       this.#destinations,
       this.#offers,
       this.#handleToDefaultPoint,
-      this.#handleToDefaultPoint, // submit
-      this.#handleToDefaultPoint // reset
-    ); // так как пока что у кнопок reset и submit одинаковое, временно сделаем одинаковое поведение у них
+      this.#handleSubmit,
+      this.#handleReset
+    );
 
     if (previousPointComponent === null || previousEditPointComponent === null) {
       render(this.#pointComponent, this.#pointsListContainer);
@@ -86,8 +87,17 @@ export default class PointPresenter {
     this.#isEditing = true;
   };
 
+  #handleSubmit = () => {
+    this.#handlePointChange(USER_ACTIONS.UPDATE_POINT, UPDATE_TYPES.MINOR, this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
+    this.#turnIntoPoint();
+  };
+
+  #handleReset = () => {
+    this.#handlePointChange(USER_ACTIONS.UPDATE_POINT, UPDATE_TYPES.MINOR, this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
+  };
+
   #handleFavoritePoint = () => {
-    this.#handlePointChange(this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
+    this.#handlePointChange(USER_ACTIONS.UPDATE_POINT, UPDATE_TYPES.MINOR, this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
   };
 
   #handleToDefaultPoint = () => {

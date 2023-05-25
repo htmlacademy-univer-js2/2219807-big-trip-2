@@ -6,7 +6,8 @@ import Observable from '../framework/observable';
 export default class PointModel extends Observable {
   #points;
   #destinations;
-  #offers
+  #offers;
+
   init() {
     this.#points = Array.from({length: 3}, generatePoints);
     this.#destinations = destinations;
@@ -24,4 +25,19 @@ export default class PointModel extends Observable {
   get offers() {
     return this.#offers;
   }
+
+  updatePoint = (updateType, update) => {
+    this.#points = [this.#points.map((item) => item.id === update.id ? update : item)];
+    this._notify(updateType, update);
+  };
+
+  addPoint = (updateType, update) => {
+    this.#points = [update, ...this.#points];
+    this._notify(updateType, update);
+  };
+
+  deletePoint = (updateType, update) => {
+    this.#points.filter((point) => point !== update);
+    this._notify(updateType, update);
+  };
 }

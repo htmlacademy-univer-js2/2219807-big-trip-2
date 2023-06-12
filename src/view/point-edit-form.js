@@ -1,11 +1,9 @@
-import {
-  enumerateTypesTrip,
-  reformatOfferTitles,
-  humanizeDate
-} from '../utils/util';
+import {enumerateTypesTrip, reformatOfferTitles, humanizeDate} from '../utils/util';
 import {TRIP_TYPES} from '../utils/const';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+import flatpickr from 'flatpickr';
 
+import 'flatpickr/dist/flatpickr.min.css';
 
 const createEditForm = (state) => (`
 <form class="event event--edit" action="#" method="post">
@@ -13,7 +11,7 @@ const createEditForm = (state) => (`
                   <div class="event__type-wrapper">
                     <label class="event__type  event__type-btn" for="event-type-toggle-1">
                       <span class="visually-hidden">Choose event type</span>
-                      <img class="event__type-icon" width="17" height="17" src="img/icons/${state.type}.png" alt="Event type icon">
+                      <img class="event__type-icon" width="17" height="17" src="img/icons/${state.type.toLowerCase()}.png" alt="Event type icon">
                     </label>
                     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
                     <div class="event__type-list">
@@ -30,9 +28,7 @@ const createEditForm = (state) => (`
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-${state.id}" type="text" name="event-destination" value=${state.pointDestination.name} list="destination-list-${state.id}">
                     <datalist id="destination-list-${state.id}">
-                      <option value="Amsterdam"></option>
-                      <option value="Geneva"></option>
-                      <option value="Chamonix"></option>
+                    <option value=${state.pointDestination.name}></option>
                     </datalist>
                   </div>
 
@@ -65,7 +61,7 @@ const createEditForm = (state) => (`
                     <div class="event__available-offers">
                     ${state.pointTypeOffers.map((typeOffer) => (
     `<div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${reformatOfferTitles(typeOffer.title)}-1"
+                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${state.id}-${typeOffer.id}"
                          type="checkbox" name="event-offer-${reformatOfferTitles(typeOffer.title)}" ${state.pointOffers.includes(typeOffer.id) ? 'checked' : ''}>
                         <label class="event__offer-label" for="event-offer-${reformatOfferTitles(typeOffer.title)}-1">
                           <span class="event__offer-title">${typeOffer.title}</span>
@@ -95,9 +91,12 @@ const createEditForm = (state) => (`
 export default class EditFormView extends AbstractStatefulView {
   #handleToPointClick;
   #handleReset;
+  #datePicker;
+  #destinations;
 
   constructor(point, destinations, offers, handleToPointClick, handleSubmit, handleReset) {
     super();
+    this.#destinations = destinations;
     this._state = EditFormView.parseFormViewToState(point, destinations, offers);
 
     this.#handleToPointClick = handleToPointClick;
@@ -110,11 +109,14 @@ export default class EditFormView extends AbstractStatefulView {
   }
 
   #setInnerHandlers = () => {
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
     this.setFormSubmitHandler(EditFormView.parseStateToFormView);
     this.element.addEventListener('reset', this.#handleReset);
+    this.element.querySelector('.event__save-btn').addEventListener('click', this.#submitHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
     this.element.querySelector('.event__type-list').addEventListener('click', this.#changeTripType);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#showNewDescriptionAndPhotos);
+    this.element.querySelector('#event-start-time-1').addEventListener('click', this.#setDatePickerDateFrom);
+    this.element.querySelector('#event-end-time-1').addEventListener('click', this.#setDatePickerDateTo);
   };
 
   #clickHandler = (evt) => {
@@ -153,8 +155,60 @@ export default class EditFormView extends AbstractStatefulView {
     });
   };
 
+  #setDatePickerDateFrom = () => {
+    this.#datePicker = flatpickr(
+      this.element.querySelector('.event__input--time[name=event-start-time]'),
+      {
+        enableTime: true,
+        dateFormat: 'd/m/y H:s',
+        defaultDate: this._state.dateFrom,
+        maxDate: this._state.dateTo,
+        time_24hr: true,
+        onChange: this.#dateFromChangeHandler,
+      }
+    );
+  };
+
+  #setDatePickerDateTo = () => {
+    this.#datePicker = flatpickr(
+      this.element.querySelector('.event__input--time[name=event-end-time]'),
+      {
+        enableTime: true,
+        dateFormat: 'd/m/y H:s',
+        defaultDate: this._state.dateTo,
+        minDate: this._state.dateFrom,
+        time_24hr: true,
+        onChange: this.#dateToChangeHandler,
+      }
+    );
+  };
+
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datePicker) {
+      this.#datePicker.destroy();
+      this.#datePicker = null;
+    }
+  }
+
+  #dateFromChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate
+    });
+  };
+
+  #dateToChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate
+    });
+  };
+
   _restoreHandlers() {
     this.#setInnerHandlers();
+    this.element.querySelector('#event-start-time-1').addEventListener('click', this.#setDatePickerDateFrom);
+    this.element.querySelector('#event-end-time-1').addEventListener('click', this.#setDatePickerDateTo);
+    this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
   static parseFormViewToState = (point, destinations, offers) => ({

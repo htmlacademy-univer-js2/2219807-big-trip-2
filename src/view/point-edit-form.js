@@ -2,6 +2,7 @@ import {enumerateTypesTrip, reformatOfferTitles, humanizeDate} from '../utils/ut
 import {TRIP_TYPES} from '../utils/const';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import flatpickr from 'flatpickr';
+import he from 'he';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -27,7 +28,8 @@ const createEditForm = (state) => (`
                     <label class="event__label  event__type-output" for="event-destination-${state.id}">
                       ${state.type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-${state.id}" type="text" name="event-destination" value=${state.pointDestination.name} list="destination-list-${state.id}">
+                    <input class="event__input  event__input--destination" id="event-destination-${state.id}" type="text"
+                     name="event-destination" value=${he.encode(state.pointDestination.name)} list="destination-list-${state.id}">
                     <datalist id="destination-list-${state.id}">
                       <option value=${state.pointDestination.name}></option>
                     </datalist>
@@ -46,7 +48,7 @@ const createEditForm = (state) => (`
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${state.basePrice}">
+                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${state.basePrice}">
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

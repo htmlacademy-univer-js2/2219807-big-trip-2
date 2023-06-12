@@ -28,7 +28,7 @@ const createEditForm = (state) => (`
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-${state.id}" type="text" name="event-destination" value=${state.pointDestination.name} list="destination-list-${state.id}">
                     <datalist id="destination-list-${state.id}">
-                    ${state.destinations.map((destination) => `<option value=${destination.name}></option>`)}
+                    <option value=${state.pointDestination.name}></option>
                     </datalist>
                   </div>
 

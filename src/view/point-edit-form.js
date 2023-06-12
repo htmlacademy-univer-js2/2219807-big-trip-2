@@ -12,7 +12,7 @@ const createEditForm = (state) => (`
                   <div class="event__type-wrapper">
                     <label class="event__type  event__type-btn" for="event-type-toggle-1">
                       <span class="visually-hidden">Choose event type</span>
-                      <img class="event__type-icon" width="17" height="17" src="img/icons/${state.type}.png" alt="Event type icon">
+                      <img class="event__type-icon" width="17" height="17" src="img/icons/${state.type.toLowerCase()}.png" alt="Event type icon">
                     </label>
                     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
                     <div class="event__type-list">
@@ -29,9 +29,7 @@ const createEditForm = (state) => (`
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-${state.id}" type="text" name="event-destination" value=${state.pointDestination.name} list="destination-list-${state.id}">
                     <datalist id="destination-list-${state.id}">
-                      <option value="Amsterdam"></option>
-                      <option value="Geneva"></option>
-                      <option value="Chamonix"></option>
+                      <option value=${state.pointDestination.name}></option>
                     </datalist>
                   </div>
 
@@ -64,7 +62,7 @@ const createEditForm = (state) => (`
                     <div class="event__available-offers">
                     ${state.pointTypeOffers.map((typeOffer) => (
     `<div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${reformatOfferTitles(typeOffer.title)}-1"
+                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${state.id}-${typeOffer.id}"
                          type="checkbox" name="event-offer-${reformatOfferTitles(typeOffer.title)}" ${state.pointOffers.includes(typeOffer.id) ? 'checked' : ''}>
                         <label class="event__offer-label" for="event-offer-${reformatOfferTitles(typeOffer.title)}-1">
                           <span class="event__offer-title">${typeOffer.title}</span>
@@ -94,7 +92,8 @@ const createEditForm = (state) => (`
 export default class EditFormView extends AbstractStatefulView {
   #handleToPointClick;
   #handleReset;
-  #datePicker;
+  #datePickerFrom;
+  #datePickerTo
 
   constructor(point, destinations, offers, handleToPointClick, handleSubmit, handleReset) {
     super();
@@ -113,6 +112,7 @@ export default class EditFormView extends AbstractStatefulView {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
     this.setFormSubmitHandler(EditFormView.parseStateToFormView);
     this.element.addEventListener('reset', this.#handleReset);
+    this.element.querySelector('.event__save-btn').addEventListener('click', this.#submitHandler);
     this.element.querySelector('.event__type-list').addEventListener('click', this.#changeTripType);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#showNewDescriptionAndPhotos);
     this.element.querySelector('#event-start-time-1').addEventListener('click', this.#setDatePickerDateFrom);
@@ -156,13 +156,14 @@ export default class EditFormView extends AbstractStatefulView {
   };
 
   #setDatePickerDateFrom = () => {
-    this.#datePicker = flatpickr(
-      this.element.querySelector('#event-start-time-1'),
+    this.#datePickerFrom = flatpickr(
+      this.element.querySelector('.event__input--time[name=event-end-time]'),
       {
         enableTime: true,
         dateFormat: 'd/m/y H:s',
         defaultDate: this._state.dateFrom,
         maxDate: this._state.dateTo,
+        // eslint-disable-next-line camelcase
         time_24hr: true,
         onChange: this.#dateChangeHandler,
       }
@@ -170,25 +171,26 @@ export default class EditFormView extends AbstractStatefulView {
   };
 
   #setDatePickerDateTo = () => {
-    this.#datePicker = flatpickr(
-      this.element.querySelector('#event-end-time-1'),
+    this.#datePickerTo = flatpickr(
+      this.element.querySelector('.event__input--time[name=event-start-time]'),
       {
         enableTime: true,
         dateFormat: 'd/m/y H:s',
         defaultDate: this._state.dateTo,
         minDate: this._state.dateFrom,
+        // eslint-disable-next-line camelcase
         time_24hr: true,
         onChange: this.#dateChangeHandler,
       }
     );
   };
 
-  removeElement() {
+  removeElement(element) {
     super.removeElement();
 
-    if (this.#datePicker) {
-      this.#datePicker.destroy();
-      this.#datePicker = null;
+    if (element) {
+      element.destroy();
+      element = null;
     }
   }
 
@@ -202,6 +204,7 @@ export default class EditFormView extends AbstractStatefulView {
     this.#setInnerHandlers();
     this.element.querySelector('#event-start-time-1').addEventListener('click', this.#setDatePickerDateFrom);
     this.element.querySelector('#event-end-time-1').addEventListener('click', this.#setDatePickerDateTo);
+    this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
   static parseFormViewToState = (point, destinations, offers) => ({

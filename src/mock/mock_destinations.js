@@ -24,6 +24,6 @@ const generateDestination = (id) => ({
   pictures: getPicturesDestination()
 });
 
-const destinations = [generateDestination(1), generateDestination(2), generateDestination(3)];
+const mockDestinations = [generateDestination(1), generateDestination(2), generateDestination(3)];
 
-export {destinations, getRandomDescription, getRandomPicture};
+export {mockDestinations, getRandomDescription, getRandomPicture};

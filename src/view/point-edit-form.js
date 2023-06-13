@@ -2,7 +2,7 @@ import {enumerateTypesTrip, reformatOfferTitles, humanizeDate} from '../utils/ut
 import {TRIP_TYPES} from '../utils/const';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import flatpickr from 'flatpickr';
-import he from 'he';
+import {mockDestinations} from '../mock/mock_destinations';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -28,11 +28,9 @@ const createEditForm = (state) => (`
                     <label class="event__label  event__type-output" for="event-destination-${state.id}">
                       ${state.type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-${state.id}" type="text"
-                     name="event-destination" value=${he.encode(state.pointDestination.name)} list="destination-list-${state.id}">
-                    <datalist id="destination-list-${state.id}">
-                      <option value=${state.pointDestination.name}></option>
-                    </datalist>
+                    <select class="event__input  event__input--destination" id="event-destination-${state.id}" name="event-destination">
+                    ${mockDestinations.map((destination) => `<option value="${destination.name}">${destination.name}</option>`)};
+                    </select>
                   </div>
 
                   <div class="event__field-group  event__field-group--time">
@@ -48,7 +46,7 @@ const createEditForm = (state) => (`
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${state.basePrice}">
+                    <input class="event__input  event__input--price" id="event-price-1" type="number" oninput="this.value = this.value.replace(/\\D/g, '')" name="event-price" value="${state.basePrice}">
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -62,8 +60,7 @@ const createEditForm = (state) => (`
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
-                    ${state.pointTypeOffers.map((typeOffer) => (
-    `<div class="event__offer-selector">
+                    ${state.pointTypeOffers.map((typeOffer) => (`<div class="event__offer-selector">
                         <input class="event__offer-checkbox  visually-hidden" id="event-offer-${state.id}-${typeOffer.id}"
                          type="checkbox" name="event-offer-${reformatOfferTitles(typeOffer.title)}" ${state.pointOffers.includes(typeOffer.id) ? 'checked' : ''}>
                         <label class="event__offer-label" for="event-offer-${reformatOfferTitles(typeOffer.title)}-1">
@@ -88,14 +85,13 @@ const createEditForm = (state) => (`
                     </div>
                   </section>
                 </section>
-              </form>`
-);
+              </form>`);
 
 export default class EditFormView extends AbstractStatefulView {
   #handleToPointClick;
   #handleReset;
   #datePickerFrom;
-  #datePickerTo
+  #datePickerTo;
 
   constructor(point, destinations, offers, handleToPointClick, handleSubmit, handleReset) {
     super();
@@ -139,8 +135,7 @@ export default class EditFormView extends AbstractStatefulView {
   #changeTripType = (evt) => {
     if (evt.target.tagName === 'LABEL') {
       this.updateElement({
-        type: evt.target.innerHTML,
-        pointOffers: []
+        type: evt.target.innerHTML, pointOffers: []
       });
     }
   };
@@ -158,33 +153,25 @@ export default class EditFormView extends AbstractStatefulView {
   };
 
   #setDatePickerDateFrom = () => {
-    this.#datePickerFrom = flatpickr(
-      this.element.querySelector('.event__input--time[name=event-end-time]'),
-      {
-        enableTime: true,
-        dateFormat: 'd/m/y H:s',
-        defaultDate: this._state.dateFrom,
-        maxDate: this._state.dateTo,
-        // eslint-disable-next-line camelcase
-        time_24hr: true,
-        onChange: this.#dateChangeHandler,
-      }
-    );
+    this.#datePickerFrom = flatpickr(this.element.querySelector('.event__input--time[name=event-end-time]'), {
+      enableTime: true,
+      dateFormat: 'd/m/y H:s',
+      defaultDate: this._state.dateFrom,
+      maxDate: this._state.dateTo, // eslint-disable-next-line camelcase
+      time_24hr: true,
+      onChange: this.#dateChangeHandler,
+    });
   };
 
   #setDatePickerDateTo = () => {
-    this.#datePickerTo = flatpickr(
-      this.element.querySelector('.event__input--time[name=event-start-time]'),
-      {
-        enableTime: true,
-        dateFormat: 'd/m/y H:s',
-        defaultDate: this._state.dateTo,
-        minDate: this._state.dateFrom,
-        // eslint-disable-next-line camelcase
-        time_24hr: true,
-        onChange: this.#dateChangeHandler,
-      }
-    );
+    this.#datePickerTo = flatpickr(this.element.querySelector('.event__input--time[name=event-start-time]'), {
+      enableTime: true,
+      dateFormat: 'd/m/y H:s',
+      defaultDate: this._state.dateTo,
+      minDate: this._state.dateFrom, // eslint-disable-next-line camelcase
+      time_24hr: true,
+      onChange: this.#dateChangeHandler,
+    });
   };
 
   removeElement(element) {

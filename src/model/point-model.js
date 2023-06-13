@@ -1,5 +1,5 @@
 import {generatePoints} from '../mock/point';
-import {destinations} from '../mock/destinations';
+import {mockDestinations} from '../mock/mock_destinations';
 import {offers} from '../mock/offer';
 import Observable from '../framework/observable';
 
@@ -10,7 +10,7 @@ export default class PointModel extends Observable {
 
   init() {
     this.#points = Array.from({length: 3}, generatePoints);
-    this.#destinations = destinations;
+    this.#destinations = mockDestinations;
     this.#offers = offers;
   }
 

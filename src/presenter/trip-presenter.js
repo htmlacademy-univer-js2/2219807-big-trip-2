@@ -8,18 +8,25 @@ import {SortFields, UpdateTypes, UserActions} from '../utils/const';
 
 class TripPresenter {
   #pointsModel;
+  #filterModel;
   #pointsList = new PointsList();
   #pointListContainer;
+
   #destinations;
   #offers;
+
   #pointPresenter = new Map();
+
   #currentSortType = SortFields.DAY;
   #sortComponent = new SortView();
 
-  constructor(pointListContainer, pointsModel) {
+  constructor(pointListContainer, pointsModel, filterModel) {
     this.#pointListContainer = pointListContainer;
     this.#pointsModel = pointsModel;
+    this.#filterModel = filterModel;
+
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {

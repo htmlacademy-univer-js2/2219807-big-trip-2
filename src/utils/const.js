@@ -44,6 +44,11 @@ const EmptyListTextType = {
   [FilterTypes.FUTURE]: 'There are no future events now',
 };
 
+const ModesEditingPoint = {
+  DEFAULT: 'default',
+  EDITING: 'editing'
+};
+
 export {
   POINT_DESCRIPTIONS,
   IMAGE_REFERENCE,
@@ -55,5 +60,6 @@ export {
   SortFields,
   UserActions,
   UpdateTypes,
-  EmptyListTextType
+  EmptyListTextType,
+  ModesEditingPoint
 };

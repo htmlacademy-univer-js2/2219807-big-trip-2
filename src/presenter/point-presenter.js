@@ -1,7 +1,7 @@
 import PointsView from '../view/points-view';
 import EditFormView from '../view/point-edit-form';
 import {remove, render, replace} from '../framework/render';
-import {UpdateTypes, UserActions} from '../utils/const';
+import {UpdateTypes, UserActions, ModesEditingPoint} from '../utils/const';
 
 
 export default class PointPresenter {
@@ -17,8 +17,7 @@ export default class PointPresenter {
   #handlePointChange;
 
   #changeMode;
-  #isEditing = false; // Можно было бы реализовать и через объект и рассматривать несколько состояний,
-  // но я пока что решил, что не стоит, в будущем можно будет переделать
+  #isEditing = ModesEditingPoint;
 
   constructor(pointsListContainer, changeDataPoint, changeMode) {
     this.#pointsListContainer = pointsListContainer;
@@ -55,7 +54,7 @@ export default class PointPresenter {
       return;
     }
 
-    if (this.#isEditing === false) {
+    if (this.#isEditing === ModesEditingPoint.EDITING) {
       replace(this.#pointComponent, previousPointComponent);
     } else {
       replace(this.#pointEditComponent, previousEditPointComponent);
@@ -71,7 +70,7 @@ export default class PointPresenter {
   };
 
   resetView = () => {
-    if (this.#isEditing) {
+    if (this.#isEditing === ModesEditingPoint.EDITING) {
       this.#turnIntoPoint();
     }
   };
@@ -84,7 +83,7 @@ export default class PointPresenter {
     replace(this.#pointEditComponent, this.#pointComponent);
     document.addEventListener('keydown', this.#onEscKeyup);
     this.#changeMode();
-    this.#isEditing = true;
+    this.#isEditing = ModesEditingPoint.EDITING;
   };
 
   #handleSubmit = () => {
@@ -107,7 +106,7 @@ export default class PointPresenter {
   #turnIntoPoint = () => {
     replace(this.#pointComponent, this.#pointEditComponent);
     document.removeEventListener('keydown', this.#onEscKeyup);
-    this.#isEditing = false;
+    this.#isEditing = ModesEditingPoint.DEFAULT;
   };
 
   #onEscKeyup = (evt) => {

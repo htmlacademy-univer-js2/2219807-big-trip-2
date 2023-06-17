@@ -4,7 +4,7 @@ import MessageZeroPoints from '../view/empty-points-list-view';
 import {render, RenderPosition} from '../framework/render';
 import PointPresenter from './point-presenter';
 import {updatePoint, sortPriceUp, sortDateUp} from '../utils/util';
-import {SORT_FIELDS, UPDATE_TYPES, USER_ACTIONS} from '../utils/const';
+import {SortFields, UpdateTypes, UserActions} from '../utils/const';
 
 class TripPresenter {
   #pointsModel;
@@ -13,7 +13,7 @@ class TripPresenter {
   #destinations;
   #offers;
   #pointPresenter = new Map();
-  #currentSortType = SORT_FIELDS.DAY;
+  #currentSortType = SortFields.DAY;
   #sortComponent = new SortView();
 
   constructor(pointListContainer, pointsModel) {
@@ -24,9 +24,9 @@ class TripPresenter {
 
   get points() {
     switch (this.#currentSortType) {
-      case SORT_FIELDS.TIME:
+      case SortFields.TIME:
         return [...this.#pointsModel.points].sort(sortDateUp);
-      case SORT_FIELDS.PRICE:
+      case SortFields.PRICE:
         return [...this.#pointsModel.points].sort(sortPriceUp);
       default:
         return this.#pointsModel.points;
@@ -88,12 +88,12 @@ class TripPresenter {
 
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
-      case UPDATE_TYPES.PATCH:
+      case UpdateTypes.PATCH:
         this.#pointPresenter.get(data.id).init(data);
         break;
-      case UPDATE_TYPES.MINOR:
+      case UpdateTypes.MINOR:
         break;
-      case UPDATE_TYPES.MAJOR:
+      case UpdateTypes.MAJOR:
         this.#renderBoardPoints();
         break;
     }
@@ -101,13 +101,13 @@ class TripPresenter {
 
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
-      case USER_ACTIONS.UPDATE_POINT:
+      case UserActions.UPDATE_POINT:
         this.#pointsModel.updatePoint(updateType, update);
         break;
-      case USER_ACTIONS.ADD_POINT:
+      case UserActions.ADD_POINT:
         this.#pointsModel.addPoint(updateType, update);
         break;
-      case USER_ACTIONS.DELETE_POINT:
+      case UserActions.DELETE_POINT:
         this.#pointsModel.deletePoint(updateType, update);
         break;
     }

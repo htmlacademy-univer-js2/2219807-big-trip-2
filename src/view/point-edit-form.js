@@ -90,8 +90,8 @@ const createEditForm = (state) => (`
 export default class EditFormView extends AbstractStatefulView {
   #handleToPointClick;
   #handleReset;
-  #datePickerFrom;
-  #datePickerTo;
+  #datePickerFrom = null;
+  #datePickerTo =null;
 
   constructor(point, destinations, offers, handleToPointClick, handleSubmit, handleReset) {
     super();

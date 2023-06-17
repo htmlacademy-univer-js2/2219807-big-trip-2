@@ -1,7 +1,7 @@
 import PointsView from '../view/points-view';
 import EditFormView from '../view/point-edit-form';
 import {remove, render, replace} from '../framework/render';
-import {UPDATE_TYPES, USER_ACTIONS} from '../utils/const';
+import {UpdateTypes, UserActions} from '../utils/const';
 
 
 export default class PointPresenter {
@@ -88,16 +88,16 @@ export default class PointPresenter {
   };
 
   #handleSubmit = () => {
-    this.#handlePointChange(USER_ACTIONS.UPDATE_POINT, UPDATE_TYPES.MINOR, this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
+    this.#handlePointChange(UserActions.UPDATE_POINT, UpdateTypes.MINOR, this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
     this.#turnIntoPoint();
   };
 
   #handleReset = () => {
-    this.#handlePointChange(USER_ACTIONS.UPDATE_POINT, UPDATE_TYPES.MINOR, this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
+    this.#handlePointChange(UserActions.UPDATE_POINT, UpdateTypes.MINOR, this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
   };
 
   #handleFavoritePoint = () => {
-    this.#handlePointChange(USER_ACTIONS.UPDATE_POINT, UPDATE_TYPES.MINOR, this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
+    this.#handlePointChange(UserActions.UPDATE_POINT, UpdateTypes.MINOR, this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
   };
 
   #handleToDefaultPoint = () => {

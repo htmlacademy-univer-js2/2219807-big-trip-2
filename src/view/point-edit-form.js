@@ -138,13 +138,13 @@ export default class EditFormView extends AbstractStatefulView {
   };
 
   setFormCloseHandler = (callback) => {
-    this._callback.click = callback;
+    this._callback.close = callback;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeHandler);
   };
 
   #closeHandler = (evt) => {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.close();
   };
 
   #changeTripType = (evt) => {

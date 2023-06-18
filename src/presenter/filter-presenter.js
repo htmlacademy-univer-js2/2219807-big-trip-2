@@ -1,6 +1,7 @@
 import FiltersView from '../view/filters-view';
 import {remove, render, replace} from '../framework/render';
 import {FilterTypes, UpdateTypes} from '../utils/const';
+import {filterOut} from '../mock/filter';
 
 export default class FilterPresenter {
   #filtersContainer;
@@ -18,21 +19,23 @@ export default class FilterPresenter {
   }
 
   get filters() {
+    const points = this.#pointsModel.points;
+
     return [
       {
         type: FilterTypes.EVERYTHING,
         name: 'everything',
-        count: 1,
+        count: filterOut[FilterTypes.EVERYTHING](points).length,
       },
       {
         type: FilterTypes.PAST,
         name: 'past',
-        count: 1,
+        count: filterOut[FilterTypes.PAST](points).length,
       },
       {
         type: FilterTypes.FUTURE,
         name: 'future',
-        count: 1,
+        count: filterOut[FilterTypes.FUTURE](points).length,
       },
     ];
   }
@@ -54,8 +57,9 @@ export default class FilterPresenter {
   };
 
   #handleFilterClick = (filterType) => {
-    if (!this.#filterModel.filter === filterType) {
-      this.#filterModel.setFilter(UpdateTypes.MAJOR, filterType);
+    if (this.#filterModel.filter !== filterType) {
+      return;
     }
+    this.#filterModel.setFilter(UpdateTypes.MAJOR, filterType);
   };
 }

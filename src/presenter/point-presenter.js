@@ -86,17 +86,28 @@ export default class PointPresenter {
     this.#isEditing = ModesEditingPoint.EDITING;
   };
 
-  #handleSubmit = () => {
-    this.#handlePointChange(UserActions.UPDATE_POINT, UpdateTypes.MINOR, this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
+  #handleSubmit = (update) => {
+    this.#handlePointChange(
+      UserActions.UPDATE_POINT,
+      UpdateTypes.MINOR,
+      update
+    );
     this.#turnIntoPoint();
   };
 
   #handleReset = () => {
-    this.#handlePointChange(UserActions.UPDATE_POINT, UpdateTypes.MINOR, this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
+    this.#handlePointChange(
+      UserActions.UPDATE_POINT,
+      UpdateTypes.MINOR,
+      {...this.#point, isFavorite: !this.#point.isFavorite}
+    );
   };
 
   #handleFavoritePoint = () => {
-    this.#handlePointChange(UserActions.UPDATE_POINT, UpdateTypes.MINOR, this.#point, this.#destinations, this.#offers, !this.#point.isFavorite);
+    this.#handlePointChange(
+      UserActions.UPDATE_POINT,
+      UpdateTypes.MINOR,
+      {...this.#point, isFavorite: !this.#point.isFavorite});
   };
 
   #handleToDefaultPoint = () => {

@@ -1,10 +1,10 @@
 import SortView from '../view/sort-view';
 import PointsList from '../view/points-list';
 import MessageZeroPoints from '../view/empty-points-list-view';
-import {render, RenderPosition} from '../framework/render';
+import {remove, render, RenderPosition} from '../framework/render';
 import PointPresenter from './point-presenter';
 import {updatePoint, sortPriceUp, sortDateUp} from '../utils/util';
-import {SortFields, UpdateTypes, UserActions} from '../utils/const';
+import {FilterTypes, SortFields, UpdateTypes, UserActions} from '../utils/const';
 
 class TripPresenter {
   #pointsModel;
@@ -18,6 +18,7 @@ class TripPresenter {
   #pointPresenter = new Map();
 
   #currentSortType = SortFields.DAY;
+  #currentFilterType = FilterTypes.EVERYTHING;
   #sortComponent = new SortView();
 
   constructor(pointListContainer, pointsModel, filterModel) {
@@ -35,9 +36,8 @@ class TripPresenter {
         return [...this.#pointsModel.points].sort(sortDateUp);
       case SortFields.PRICE:
         return [...this.#pointsModel.points].sort(sortPriceUp);
-      default:
-        return this.#pointsModel.points;
     }
+    return this.#pointsModel.points;
   }
 
   init() {
@@ -61,6 +61,8 @@ class TripPresenter {
   #clearPointsList = () => {
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
+
+    remove(this.#sortComponent);
   };
 
   #handlePointChange = (updatedPoint, offers, destinations) => {
@@ -99,8 +101,11 @@ class TripPresenter {
         this.#pointPresenter.get(data.id).init(data);
         break;
       case UpdateTypes.MINOR:
+        this.#clearPointsList();
+        this.#renderBoardPoints();
         break;
       case UpdateTypes.MAJOR:
+        this.#clearPointsList({resetSortType: true});
         this.#renderBoardPoints();
         break;
     }

@@ -1,10 +1,10 @@
 import AbstractView from '../framework/view/abstract-view';
-import {SORT_FIELDS} from '../utils/const';
+import {SortFields} from '../utils/const';
 
 const createSort = () => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
             <div class="trip-sort__item  trip-sort__item--day">
-              <input id="sort-day" data-sort-type="${SORT_FIELDS.DAY}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" checked>
+              <input id="sort-day" data-sort-type="${SortFields.DAY}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" checked>
               <label class="trip-sort__btn" for="sort-day">Day</label>
             </div>
 
@@ -14,12 +14,12 @@ const createSort = () => (
             </div>
 
             <div class="trip-sort__item  trip-sort__item--time">
-              <input id="sort-time" data-sort-type="${SORT_FIELDS.TIME}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
+              <input id="sort-time" data-sort-type="${SortFields.TIME}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
               <label class="trip-sort__btn" for="sort-time">Time</label>
             </div>
 
             <div class="trip-sort__item  trip-sort__item--price">
-              <input id="sort-price" data-sort-type="${SORT_FIELDS.PRICE}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
+              <input id="sort-price" data-sort-type="${SortFields.PRICE}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
               <label class="trip-sort__btn" for="sort-price">Price</label>
             </div>
 

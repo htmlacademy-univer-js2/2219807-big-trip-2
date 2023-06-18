@@ -49,6 +49,9 @@ const updatePoint = (points, update) => points.map((item) => item.id === update.
 const sortDateUp = (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
 const sortPriceUp = (priceA, priceB) => priceA.basePrice - priceB.basePrice;
 
+const tripIsInPast = (point) => dayjs().diff(point.dateTo, 'minute') > 0;
+const tripIsInFuture = (point) => dayjs().diff(point.dateFrom, 'minute') <= 0;
+
 export {
   getRandomInteger,
   humanizeDate,
@@ -62,5 +65,7 @@ export {
   isTravelDatePassed,
   updatePoint,
   sortDateUp,
-  sortPriceUp
+  sortPriceUp,
+  tripIsInFuture,
+  tripIsInPast
 };

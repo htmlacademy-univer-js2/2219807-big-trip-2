@@ -1,11 +1,17 @@
-import AbstractView from '../framework/view/abstract-view';
+import AbstractView from '../framework/view/abstract-view.js';
+import { EmptyListTextType} from '../utils/const';
 
-const createMessageZeroPoints = () => '<p class="trip-events__msg">Click New Event to create your first point</p>';
+const createEmptyListTemplate = (filterType) => `<p class="trip-events__msg">${EmptyListTextType[filterType]}</p>`;
 
-export default class MessageZeroPoints extends AbstractView{
+export default class EmptyListView extends AbstractView {
+  #filterType = null;
+
+  constructor(filterType) {
+    super();
+    this.#filterType = filterType;
+  }
+
   get template() {
-    return createMessageZeroPoints();
+    return createEmptyListTemplate(this.#filterType);
   }
 }
-
-

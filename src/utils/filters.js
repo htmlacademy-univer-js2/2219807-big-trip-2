@@ -1,10 +1,10 @@
-import {FILTER_TYPE} from './const';
+import {FilterTypes} from './const';
 import {isTravelDatePassed} from './util';
 
 const filter = {
-  [FILTER_TYPE.EVERYTHING]: (points) => points,
-  [FILTER_TYPE.FUTURE]: (points) => points.filter((point) => !isTravelDatePassed(point.dateFrom)),
-  [FILTER_TYPE.PAST]: (points) => points.filter((point) => isTravelDatePassed(point.dateTo))
+  [FilterTypes.EVERYTHING]: (points) => points,
+  [FilterTypes.FUTURE]: (points) => points.filter((point) => !isTravelDatePassed(point.dateFrom)),
+  [FilterTypes.PAST]: (points) => points.filter((point) => isTravelDatePassed(point.dateTo))
 };
 
 export {filter};

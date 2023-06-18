@@ -85,13 +85,13 @@ const createEditForm = (state) => (`
                     </div>
                   </section>
                 </section>
-              </form>`);
+              </form>`
+);
 
 export default class EditFormView extends AbstractStatefulView {
-  #handleToPointClick;
-  #handleReset;
   #datePickerFrom = null;
   #datePickerTo = null;
+  #isPreviouslyEditing = false;
 
   constructor(point, destinations, offers) {
     super();
@@ -105,29 +105,46 @@ export default class EditFormView extends AbstractStatefulView {
   }
 
   #setInnerHandlers = () => {
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
-    this.setFormSubmitHandler(EditFormView.parseStateToFormView);
-    this.element.addEventListener('reset', this.#handleReset);
-    this.element.querySelector('.event__save-btn').addEventListener('click', this.#submitHandler);
     this.element.querySelector('.event__type-list').addEventListener('click', this.#changeTripType);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#showNewDescriptionAndPhotos);
     this.element.querySelector('#event-start-time-1').addEventListener('click', this.#setDatePickerDateFrom);
     this.element.querySelector('#event-end-time-1').addEventListener('click', this.#setDatePickerDateTo);
   };
 
-  #clickHandler = (evt) => {
-    evt.preventDefault();
-    this.#handleToPointClick();
+  reset = (point) => {
+    this.updateElement(
+      EditFormView.parseStateToFormView(point),
+    );
   };
 
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
-    this.element.addEventListener('submit', this.#submitHandler);
+    this.element.querySelector('.event__save-btn').addEventListener('click', this.#submitHandler);
   };
 
   #submitHandler = (evt) => {
     evt.preventDefault();
     this._callback.formSubmit(EditFormView.parseStateToFormView(this._state));
+  };
+
+  setResetSubmitHandler = (callback) => {
+    this._callback.reset = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#handleReset);
+  };
+
+  #handleReset = (evt) => {
+    evt.preventDefault();
+    this._callback.reset(EditFormView.parseStateToFormView(this._state));
+  };
+
+  setFormCloseHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeHandler);
+  };
+
+  #closeHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
   };
 
   #changeTripType = (evt) => {
@@ -189,10 +206,18 @@ export default class EditFormView extends AbstractStatefulView {
 
   _restoreHandlers() {
     this.#setInnerHandlers();
-    this.element.querySelector('#event-start-time-1').addEventListener('click', this.#setDatePickerDateFrom);
-    this.element.querySelector('#event-end-time-1').addEventListener('click', this.#setDatePickerDateTo);
-    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.#setDatePickerDateTo();
+    this.#setDatePickerDateFrom();
+    this.#setOutHandlers();
   }
+
+  #setOutHandlers = () => {
+    if (!this.#isPreviouslyEditing) {
+      this.setFormCloseHandler(this._callback.close);
+    }
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setResetSubmitHandler(this._callback.reset);
+  };
 
   static parseFormViewToState = (point, destinations, offers) => ({
     ...point,

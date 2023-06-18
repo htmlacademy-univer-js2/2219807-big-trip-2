@@ -6,7 +6,6 @@ import {mockDestinations} from '../mock/mock_destinations';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
-
 const createEditForm = (state) => (`
 <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -31,6 +30,7 @@ const createEditForm = (state) => (`
                     <select class="event__input  event__input--destination" id="event-destination-${state.id}" name="event-destination">
                     ${mockDestinations.map((destination) => `<option value="${destination.name}">${destination.name}</option>`)};
                     </select>
+
                   </div>
 
                   <div class="event__field-group  event__field-group--time">
@@ -61,6 +61,7 @@ const createEditForm = (state) => (`
 
                     <div class="event__available-offers">
                     ${state.pointTypeOffers.map((typeOffer) => (`<div class="event__offer-selector">
+
                         <input class="event__offer-checkbox  visually-hidden" id="event-offer-${state.id}-${typeOffer.id}"
                          type="checkbox" name="event-offer-${reformatOfferTitles(typeOffer.title)}" ${state.pointOffers.includes(typeOffer.id) ? 'checked' : ''}>
                         <label class="event__offer-label" for="event-offer-${reformatOfferTitles(typeOffer.title)}-1">
@@ -95,6 +96,7 @@ export default class EditFormView extends AbstractStatefulView {
 
   constructor(point, destinations, offers) {
     super();
+    this.#destinations = destinations;
     this._state = EditFormView.parseFormViewToState(point, destinations, offers);
 
     this.#setInnerHandlers();
@@ -198,7 +200,13 @@ export default class EditFormView extends AbstractStatefulView {
     }
   }
 
-  #dateChangeHandler = ([userDate]) => {
+  #dateFromChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate
+    });
+  };
+
+  #dateToChangeHandler = ([userDate]) => {
     this.updateElement({
       dateFrom: userDate
     });

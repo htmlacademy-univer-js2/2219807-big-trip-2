@@ -1,5 +1,4 @@
 import PointsView from '../view/points-view';
-import EditFormView from '../view/point-edit-form';
 import {remove, render, replace} from '../framework/render';
 import {UpdateTypes, UserActions, ModesEditingPoint} from '../utils/const';
 import PointEditForm from '../view/point-edit-form';

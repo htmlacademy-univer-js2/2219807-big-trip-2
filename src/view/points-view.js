@@ -1,4 +1,4 @@
-import {getDifferenceTime, humanizeDate} from '../utils/util';
+import {getDifferenceDates, humanizeDate} from '../utils/util';
 import AbstractView from '../framework/view/abstract-view';
 
 
@@ -8,7 +8,7 @@ const createPointTemplate = (point, destinations, offers) => {
   const isFavoriteButtonClass = isFavorite ? 'event__favorite-btn--active' : '';
   const humanizedDateFrom = dateFrom !== null ? humanizeDate(dateFrom, 'HH:mm') : '';
   const humanizedDateTo = dateTo !== null ? humanizeDate(dateTo, 'HH:mm') : '';
-  const differenceTime = getDifferenceTime(dateFrom, dateTo);
+  const differenceTime = getDifferenceDates(dateFrom, dateTo);
   const dateMonthDay = dateFrom !== null ? humanizeDate(dateFrom, 'MMM DD') : '';
   const pointDestination = destinations.find((destination) => destination.id === point.destination);
   const pointTypeOffers = offers.find((offer) => offer.type === point.type).offers;
@@ -71,24 +71,4 @@ export default class PointsView extends AbstractView {
   get template() {
     return createPointTemplate(this.#point, this.#destinations, this.#offers);
   }
-
-  setFavoritePointClickHandler = (callback) => {
-    this._callback.favoriteClick = callback;
-    this.element.querySelector('.event__favorite-btn ').addEventListener('click', this.#favoriteClickHandler);
-  };
-
-  #favoriteClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.favoriteClick();
-  };
-
-  setEditModeClickHandler = (callback) => {
-    this._callback.click = callback;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#toEditClickHandler);
-  };
-
-  #toEditClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.click();
-  };
 }

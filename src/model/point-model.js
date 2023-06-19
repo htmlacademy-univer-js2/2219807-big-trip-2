@@ -32,7 +32,7 @@ export default class PointsModel extends Observable {
       this.#points = points.map(this.#adaptToClient);
       this.#destinations = await this.#pointsApiService.destinations;
       this.#offers = await this.#pointsApiService.offers;
-    } catch(err) {
+    } catch (err) {
       this.#points = [];
       this.#offers = [];
       this.#destinations = [];
@@ -87,7 +87,8 @@ export default class PointsModel extends Observable {
   }
 
   #adaptToClient = (point) => {
-    const adaptedPoint = {...point,
+    const adaptedPoint = {
+      ...point,
       basePrice: point['base_price'],
       dateFrom: point['date_from'],
       dateTo: point['date_to'],

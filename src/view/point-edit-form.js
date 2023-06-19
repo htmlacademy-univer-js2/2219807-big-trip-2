@@ -242,18 +242,6 @@ export default class PointEditForm extends AbstractStatefulView {
     this.#closeClick();
   };
 
-  _restoreHandlers = () => {
-    this.checkQuerySelector('.event__rollup-btn', 'click', this.#closeClickHandler);
-    this.checkQuerySelector('.event__save-btn', 'click', this.#saveClickHandler);
-    this.checkQuerySelector('.event__input--price', 'input', this.#pointPriceChangeHandler);
-    this.checkQuerySelector('.event__type-group', 'change', this.#pointTypeChangeHandler);
-    this.checkQuerySelector('.event__input--destination', 'blur', this.#pointDestinationChangeHandler);
-    this.checkQuerySelector('.event__available-offers', 'click', this.#offersChangeHandler);
-    this.checkQuerySelector('.event__reset-btn', 'click', this.#deleteClickHandler);
-    this.#setDatepickerFrom();
-    this.#setDatepickerTo();
-  };
-
   reset = (point) => this.updateElement(PointEditForm.parsePointToState(point, this.#offersByType, this.#destinations));
 
   checkQuerySelector = (event, action, handler) => {
@@ -312,4 +300,16 @@ export default class PointEditForm extends AbstractStatefulView {
       },
     );
   };
+
+  _restoreHandlers() {
+    this.checkQuerySelector('.event__rollup-btn', 'click', this.#closeClickHandler);
+    this.checkQuerySelector('.event__save-btn', 'click', this.#saveClickHandler);
+    this.checkQuerySelector('.event__input--price', 'input', this.#pointPriceChangeHandler);
+    this.checkQuerySelector('.event__type-group', 'change', this.#pointTypeChangeHandler);
+    this.checkQuerySelector('.event__input--destination', 'blur', this.#pointDestinationChangeHandler);
+    this.checkQuerySelector('.event__available-offers', 'click', this.#offersChangeHandler);
+    this.checkQuerySelector('.event__reset-btn', 'click', this.#deleteClickHandler);
+    this.#setDatepickerFrom();
+    this.#setDatepickerTo();
+  }
 }

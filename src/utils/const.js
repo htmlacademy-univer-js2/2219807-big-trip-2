@@ -1,18 +1,7 @@
-const POINT_DESCRIPTIONS = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  'Cras aliquet varius magna, non porta ligula feugiat eget.',
-  'Fusce tristique felis at fermentum pharetra.',
-  'Aliquam id orci ut lectus varius viverra.',
-  'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
-  'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.',
-  'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.'
-];
+import {tripIsInFuture, tripIsInPast} from './util';
+import {getDifferenceDates} from './util';
 
-const COUNTRIES = ['Moscow', 'Ekaterinburg', 'Paris'];
-const IMAGE_REFERENCE = 'https://loremflickr.com/248/152?random=0.0762463005163317';
 const TRIP_TYPES = ['taxi', 'bus', 'flight'];
-const TITLES_OFFER = ['Stay overnight', 'Add lunch', 'Add a place pet'];
-const MINUTES_GAP = 30;
 
 const FilterTypes = {
   EVERYTHING: 'everything',
@@ -35,7 +24,8 @@ const UserActions = {
 const UpdateTypes = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
-  MAJOR: 'MAJOR'
+  MAJOR: 'MAJOR',
+  INIT: 'INIT'
 };
 
 const EmptyListTextType = {
@@ -49,17 +39,45 @@ const ModesEditingPoint = {
   EDITING: 'editing'
 };
 
+const filterOut = {
+  [FilterTypes.EVERYTHING]: (points) => points,
+  [FilterTypes.FUTURE]: (points) => points.filter((point) => tripIsInFuture(point)),
+  [FilterTypes.PAST]: (points) => points.filter((point) => tripIsInPast(point)),
+};
+
+const sorting = {
+  [SortFields.DAY]: (points) => points.sort((pointA, pointB) => getDifferenceDates(pointB.dateFrom, pointA.dateFrom)),
+  [SortFields.TIME]: (points) => points.sort((pointA, pointB) => getDifferenceDates(pointA.dateFrom, pointA.dateTo) - getDifferenceDates(pointB.dateFrom, pointB.dateTo)),
+  [SortFields.PRICE]: (points) => points.sort((pointA, pointB) => pointA.basePrice - pointB.basePrice)
+};
+
+const Methods = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE'
+};
+
+const BLANK_POINT = {
+  basePrice: 100,
+  dateFrom: new Date(),
+  dateTo: new Date(),
+  destination: 1,
+  isFavorite: false,
+  offers: [],
+  type: TRIP_TYPES[0],
+};
+
 export {
-  POINT_DESCRIPTIONS,
-  IMAGE_REFERENCE,
-  COUNTRIES,
   TRIP_TYPES,
-  MINUTES_GAP,
-  TITLES_OFFER,
   FilterTypes,
   SortFields,
   UserActions,
   UpdateTypes,
   EmptyListTextType,
-  ModesEditingPoint
+  ModesEditingPoint,
+  filterOut,
+  sorting,
+  Methods,
+  BLANK_POINT
 };

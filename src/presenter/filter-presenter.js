@@ -1,21 +1,22 @@
 import FiltersView from '../view/filters-view';
 import {remove, render, replace} from '../framework/render';
 import {FilterTypes, UpdateTypes} from '../utils/const';
-import {filterOut} from '../mock/filter';
+import {filterOut} from '../utils/const';
 
 export default class FilterPresenter {
   #filtersContainer;
-  #filterModel;
-  #pointsModel;
   #filtersComponent;
 
-  constructor(filtersContainer, filterModel, pointsModel) {
+  #filterModel;
+  #pointsModel;
+
+  constructor({filtersContainer, filterModel, pointsModel}) {
     this.#filtersContainer = filtersContainer;
     this.#filterModel = filterModel;
     this.#pointsModel = pointsModel;
 
-    this.#pointsModel.addObserver(this.#handleModeEvent);
-    this.#filterModel.addObserver(this.#handleModeEvent);
+    //this.#pointsModel.addObserver(this.#handleModeEvent);
+    //this.#filterModel.addObserver(this.#handleModeEvent);
   }
 
   get filters() {
@@ -25,24 +26,24 @@ export default class FilterPresenter {
       {
         type: FilterTypes.EVERYTHING,
         name: 'everything',
-        count: filterOut[FilterTypes.EVERYTHING](points).length,
+        isEmpty: filterOut[FilterTypes.EVERYTHING](points).length === 0,
       },
       {
         type: FilterTypes.PAST,
         name: 'past',
-        count: filterOut[FilterTypes.PAST](points).length,
+        isEmpty: filterOut[FilterTypes.PAST](points).length === 0,
       },
       {
         type: FilterTypes.FUTURE,
         name: 'future',
-        count: filterOut[FilterTypes.FUTURE](points).length,
+        isEmpty: filterOut[FilterTypes.FUTURE](points).length === 0,
       },
     ];
   }
 
   init() {
     const previousFilterComponent = this.#filtersComponent;
-    this.#filtersComponent = new FiltersView(this.filters, this.#filterModel.filter);
+    this.#filtersComponent = new FiltersView(this.filters, this.#filterModel.filter, this.#handleFilterClick);
 
     if (previousFilterComponent) {
       replace(this.#filtersComponent, previousFilterComponent);
@@ -57,7 +58,7 @@ export default class FilterPresenter {
   };
 
   #handleFilterClick = (filterType) => {
-    if (this.#filterModel.filter !== filterType) {
+    if (this.#filterModel.filter === filterType) {
       return;
     }
     this.#filterModel.setFilter(UpdateTypes.MAJOR, filterType);

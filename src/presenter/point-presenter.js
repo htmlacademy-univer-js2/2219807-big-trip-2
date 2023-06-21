@@ -47,6 +47,9 @@ export default class PointPresenter {
       deleteClick: this.#handleDeletePoint
     });
 
+    this.#pointComponent.setClickHandler(this.#handleEditClick);
+    this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+
     if (previousPointComponent === null || previousPointEditComponent === null) {
       render(this.#pointComponent, this.#pointsListComponent);
       return;
@@ -122,7 +125,10 @@ export default class PointPresenter {
 
   #handleDeletePoint = (point) => this.#dataChange(UserActions.DELETE_POINT, UpdateTypes.MAJOR, point);
 
-  #handleEditClick = () => this.#replacePointToForm();
+  #handleEditClick = () =>  {
+    this.#replacePointToForm();
+    document.addEventListener('keydown', this.#onEscKeyDown);
+  };
 
   #handleFavoriteClick = () => {
     this.#dataChange(

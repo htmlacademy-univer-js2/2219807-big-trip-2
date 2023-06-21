@@ -33,6 +33,6 @@ const tripPresenter = new TripPresenter({
 
 render(new MenuView(), siteNavigationContainer);
 
-pointsModel.init();
+pointsModel.init().finally();
 tripPresenter.init();
 filterPresenter.init();

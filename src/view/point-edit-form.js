@@ -132,12 +132,12 @@ export default class PointEditForm extends AbstractStatefulView {
   #closeClick = null;
   #deleteClick = null;
 
-  constructor({point = BLANK_POINT, destinations, offersByType, saveClick, closeClick, deleteClick}) {
+  constructor({point = BLANK_POINT, destinations, offers, saveClick, closeClick, deleteClick}) {
     super();
 
-    this._state = PointEditForm.parsePointToState(point, offersByType, destinations);
+    this._state = PointEditForm.parsePointToState(point, offers, destinations);
     this.#destinations = destinations;
-    this.#offersByType = offersByType;
+    this.#offersByType = offers;
 
     this.#saveClick = saveClick;
     this.#closeClick = closeClick;

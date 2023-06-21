@@ -9,15 +9,15 @@ export default class PointPresenter {
   #point;
   #destinations;
   #offers;
-  #pointComponent;
-  #pointEditComponent;
+  #pointComponent = null;
+  #pointEditComponent = null;
 
   #dataChange;
   #modeChange;
   #mode = ModesEditingPoint.DEFAULT;
 
-  constructor({pointsListComponent, dataChange, modeChange, destinations, offers}) {
-    this.#pointsListComponent = pointsListComponent;
+  constructor({pointListContainer, dataChange, modeChange, destinations, offers}) {
+    this.#pointsListComponent = pointListContainer;
     this.#destinations = destinations;
     this.#offers = offers;
     this.#dataChange = dataChange;
@@ -33,7 +33,7 @@ export default class PointPresenter {
     this.#pointComponent = new PointsView({
       point: point,
       destinations: this.#destinations,
-      offersByType: this.#offers,
+      offers: this.#offers,
       editClick: this.#handleEditClick,
       favoriteClick: this.#handleFavoriteClick
     });
@@ -41,25 +41,18 @@ export default class PointPresenter {
     this.#pointEditComponent = new PointEditForm({
       point: this.#point,
       destinations: this.#destinations,
-      offersByType: this.#offers,
+      offers: this.#offers,
       saveClick: this.#handleSaveForm,
       closeClick: this.#handleCloseForm,
       deleteClick: this.#handleDeletePoint
     });
 
+    this.#pointComponent.setClickHandler(this.#handleEditClick);
+    this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+
     if (previousPointComponent === null || previousPointEditComponent === null) {
       render(this.#pointComponent, this.#pointsListComponent);
       return;
-    }
-
-    switch (this.#mode) {
-      case ModesEditingPoint.DEFAULT:
-        replace(this.#pointComponent, previousPointComponent);
-        break;
-      case ModesEditingPoint.EDITING:
-        replace(this.#pointEditComponent, previousPointEditComponent);
-        this.#mode = ModesEditingPoint.DEFAULT;
-        break;
     }
 
     remove(previousPointComponent);
@@ -132,7 +125,10 @@ export default class PointPresenter {
 
   #handleDeletePoint = (point) => this.#dataChange(UserActions.DELETE_POINT, UpdateTypes.MAJOR, point);
 
-  #handleEditClick = () => this.#replacePointToForm();
+  #handleEditClick = () =>  {
+    this.#replacePointToForm();
+    document.addEventListener('keydown', this.#onEscKeyDown);
+  };
 
   #handleFavoriteClick = () => {
     this.#dataChange(
